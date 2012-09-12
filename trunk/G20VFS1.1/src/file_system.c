@@ -6,8 +6,39 @@
 
 
 #include "../include/structure.h"
+#include "../include/hashtable.h"
 #include <stdio.h>
 #include <string.h>
+
+/*
+	Determine File Property...Memory Utilization
+*/
+int memory_statistics()
+{
+	if(IS_VFS_MOUNTED==0)	
+		return 0;
+//Space occupied till now...
+	int meta_size=sizeof(struct Meta_header);
+	int file_desp_size=sizeof(struct file_descriptor);
+	int block_size=sizeof(struct block);
+	long int unoccupied_space= METADATA.vfs_size - (meta_size + METADATA.max_no_of_file_desp_available * file_desp_size + METADATA.no_of_blocks * block_size  );
+	puts("\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+	printf(" -*- Current Memory Statistics :");
+	printf("\nMeta header Size= %d Bytes",sizeof(METADATA));
+	printf("\nFile Descriptor header %d Bytes x %ld File Desp. = %ld Bytes",file_desp_size,METADATA.max_no_of_file_desp_available,file_desp_size * METADATA.max_no_of_file_desp_available);
+	printf("\nFile Desp. Used = %ld / %ld",METADATA.no_of_file_desp_used,METADATA.max_no_of_file_desp_available);
+
+	printf("\nSize for Blocks %ld Blocks x %d Size = %ld Bytes",METADATA.no_of_blocks,block_size,(METADATA.no_of_blocks*block_size));
+	printf("\nBlocks. Used = %ld / %ld",METADATA.no_of_blocks_used,METADATA.no_of_blocks);
+
+	printf("\nAdded Padding of size = %ld Bytes",unoccupied_space);
+	printf("\nTotal size = %ld Bytes",meta_size+(file_desp_size * METADATA.max_no_of_file_desp_available)+(METADATA.no_of_blocks*block_size)+unoccupied_space);
+	
+	printf("\nFreelist Pointer = %ld Bytes",METADATA.freelist);
+	
+	puts("\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");	
+	return 1;
+}
 
 /*
 To create a Virtual File System. <vfs_label> is the name
@@ -19,7 +50,7 @@ int create_vfs(char vfs_label[],long int size)
 {
 	//printf("VFS Created %s %ld\n",vfs_label,size);
 	FILE *fp=fopen(vfs_label,"wb");
-	if(fp==NULL) return 0;
+	if(fp==NULL) { puts("\nInvalid path/filename.");return 0; }
 
 	int meta_size=sizeof(struct Meta_header);
 	int file_desp_size=sizeof(struct file_descriptor);
@@ -30,29 +61,32 @@ int create_vfs(char vfs_label[],long int size)
         //--------------- Creating Meta Data
 	struct Meta_header meta,meta1;
 	strcpy(meta.label,vfs_label);
+	meta.vfs_size=size;
 	meta.no_of_file_desp_used=0;
-	meta.max_no_of_file_desp_available=1000;
-	//meta.max_no_of_file_desp_available=(size/(sizeof(struct block)*sizeof(struct block)));
+	meta.no_of_blocks_used=0;
+	//meta.max_no_of_file_desp_available=1000;
+	meta.max_no_of_file_desp_available=(meta.vfs_size/(sizeof(struct block)+sizeof(struct file_descriptor)));
 	meta.freelist=meta_size + meta.max_no_of_file_desp_available * file_desp_size + 1;
 	meta.counter=1;
 	meta.File_descriptor_array=meta_size + 1;
-	meta.no_of_blocks=(size-meta.freelist) / block_size;
+	meta.no_of_blocks=(meta.vfs_size-meta.freelist) / block_size;
 	//Storing Meta Data
+	printf("\nWritting Meta Data to file...");
 	if(fwrite(&meta,sizeof(meta),1,fp)==1)
 	{
-		printf("\nMeta Data Written to file...");
+		printf("done.\n");
 	}
 
 	//check Meta Stored correctly or not
 	fclose(fp);
 	fp=fopen(vfs_label,"rb+");
-	if(fread(&meta1,sizeof(meta1),1,fp)==1)
-	{
-		printf("\nMeta data from file %s %ld %ld %ld %ld %ld %ld\n", meta1.label, meta1.no_of_file_desp_used, meta1.max_no_of_file_desp_available, meta1.freelist, meta1.counter, meta1.File_descriptor_array,meta1.no_of_blocks);
-	}
+	//if(fread(&meta1,sizeof(meta1),1,fp)==1)
+	//{
+		//printf("\nMeta data from file %s %ld %ld %ld %ld %ld %ld\n", meta1.label, meta1.no_of_file_desp_used, meta1.max_no_of_file_desp_available, meta1.freelist, meta1.counter, meta1.File_descriptor_array,meta1.no_of_blocks);
+	//}
 
 	//-------------allocating space for header 
-	fseek(fp,0,SEEK_END);
+	fseek(fp,meta.File_descriptor_array,SEEK_SET);
 	struct file_descriptor file;
 	file.isfull='0';//0-empty 1-full
 	/*
@@ -64,34 +98,40 @@ int create_vfs(char vfs_label[],long int size)
 	long int file_size;
 	long int location_block_number;
 	*/
-	int i;	
+	long int i;	
+	printf("\nWritting File Descriptor (Header) to file...");
 	for(i=0;i<meta.max_no_of_file_desp_available;i++)
 	if(fwrite(&file,sizeof(file),1,fp)==1)
 	{
+		//printf("\nloc =%ld",ftell(fp));
 	//	printf("\nheader Written to file...");
 	}		
-	printf("header adding done");
+	puts("done.");
 
 	//--------------Creating data blocks
-	fseek(fp,0,SEEK_END);
+	fseek(fp,meta.freelist,SEEK_SET);
 	struct block b;
 	//b.isfull='0';//0-empty 1-full
 	//b.next=fp+sizeof(b);
+	puts("\nCreating  Data Blocks...");
 	for(i=0;i<meta.no_of_blocks;i++)
 	{
 		b.isfull='0';//0-empty 1-full
 		b.next=ftell(fp)+sizeof(b);///Creating Free-linked-list
-		if(i==(meta.no_of_blocks-1))
+		if(i==(meta.no_of_blocks-1)) 
 			b.next=-1; ///tracking end of free-list
+		//puts("Blocks Free list");
+		//printf("\nloc =%ld next =%ld",ftell(fp),b.next);
+		printf("\rStatus: %15ld / %-15ld blocks added",i+1,meta.no_of_blocks);
 		if(fwrite(&b,sizeof(b),1,fp)==1)
 		{
 		//	printf("\nheader Written to file...");
 		}
 	}		
-	printf("\nBlocks Creation done");
+	printf("\nBlocks Creation done.");
 
 	///add padding to fixed size
-	long int unoccupied_space= size - (meta_size + meta.max_no_of_file_desp_available * file_desp_size + meta.no_of_blocks * block_size  );
+	long int unoccupied_space= meta.vfs_size - (meta_size + meta.max_no_of_file_desp_available * file_desp_size + meta.no_of_blocks * block_size  );
 	printf("\nAdded Padding ");
 	char ch='$';	
 	for(i=0;i<unoccupied_space;i++)
@@ -109,6 +149,7 @@ int create_vfs(char vfs_label[],long int size)
 	printf("\nTotal size = %ld Bytes",meta_size+(file_desp_size * meta.max_no_of_file_desp_available)+(meta.no_of_blocks*block_size)+unoccupied_space);
 	puts("\nVirtual File System Created Successfully");
 	puts("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+
 	fclose(fp);
 	return 1;
 }
@@ -121,6 +162,8 @@ loading the file/directory descriptors into various data structures
 int mount_vfs(char name[])
 {
 	FILE *fp=fopen(name,"rb+");
+	if(fp==NULL) { puts("\nInvalid path/filename.");return 0; }
+	puts("Mounting...");
 	VFS_MOUNT_POINT = fp;
 	//load meta data
 	if(fread(&METADATA,sizeof(METADATA),1,fp)==1)
@@ -128,6 +171,7 @@ int mount_vfs(char name[])
 	
 	///Create Hash Table....
 	///Create N - Ary Tree....
+ 
 	return 1;
 }
 

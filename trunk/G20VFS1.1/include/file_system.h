@@ -4,12 +4,17 @@
 	 
 */
 
+
 /*
 To create a Virtual File System. <vfs_label> is the name
 of VFS.
 */
 int create_vfs(char[],long int);
 
+/*
+	Determine VFS  Property...Memory Utilization
+*/
+int memory_statistics();
 /*
 To Mount the VFS path on current directory. This involves
 loading the file/directory descriptors into various data structures

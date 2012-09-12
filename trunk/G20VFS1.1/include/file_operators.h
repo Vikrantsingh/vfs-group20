@@ -14,7 +14,12 @@ int create(char dest_dir[],char file_name[],char data[]);
 /*
 View the contents of a file specified by <file_path>.
 */
-int listfile(char file_path[]);
+int listfile(char file_path[],char file_name[]);
+
+/*
+list all files in current directory
+*/
+int list(char file_path[]);
 
 /*
 Update/Edit the contents of a file specified by <file_path>
@@ -43,5 +48,24 @@ int copy(char src[],char dest[]);
 Export the file from the file system into the hard disk
 */
 int Export(char file_path[]);
+
+
+/*
+	Get Free node from freelist and write data to it
+*/
+long int add_data_blocks(char [],long int );
+/*
+	Read a single data blocks at given location.
+*/
+struct block read_data_blocks(long int );
+/*
+	Display data to Screen.
+*/
+int display_data_blocks(struct block);
+/*
+	Search file and return FD location
+*/
+long int search_File(char file_name[]);
+
 
 /*--------EOF------*/

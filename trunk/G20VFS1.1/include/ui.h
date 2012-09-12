@@ -13,12 +13,12 @@ int get_command();
 	Check User Input is write or wrong
 */
 
-int validate_command();
+int identify_command(char []);
 
 /*
 	Preform action on user input
 */
 
-int process_command();
+int process_command(char []);
 
 
