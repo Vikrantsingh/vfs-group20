@@ -34,7 +34,7 @@ long int add_data_blocks(char data[],long int start)
 	{
 
 		
-		fseek(VFS_MOUNT_POINT,location-1,SEEK_SET);
+		fseek(VFS_MOUNT_POINT,location,SEEK_SET);//-1
 		if(fwrite(&b,sizeof(b),1,VFS_MOUNT_POINT)==1)
 		{
 			//printf("data block added");		
@@ -52,7 +52,7 @@ long int add_data_blocks(char data[],long int start)
 
 		while(1)
 		{
-			fseek(VFS_MOUNT_POINT,temp-1,SEEK_SET);	
+			fseek(VFS_MOUNT_POINT,temp,SEEK_SET);	//-1
 			if(fread(&b,sizeof(b),1,VFS_MOUNT_POINT)==1)
 			{
 				if(b.next==-1)
@@ -90,7 +90,7 @@ struct block read_data_blocks(long int location)
 	{
 
 		
-		fseek(VFS_MOUNT_POINT,location-1,SEEK_SET);
+		fseek(VFS_MOUNT_POINT,location,SEEK_SET);//-1
 		if(fread(&b,sizeof(b),1,VFS_MOUNT_POINT)==1)
 		{
 			//printf("reading data blocks...");		
@@ -354,6 +354,7 @@ int rm(char file_path[])
 	while(loc!=-1)
 	{	
 		struct block t = read_data_blocks(loc); //scanning data block one by one
+		printf("\ndelete node:%ld",loc);
 		delete_node(loc);//delete node and add it to freelist
 		loc=t.next;
 		//printf("start %ld, loc=%ld",temp.location_block_number,loc);

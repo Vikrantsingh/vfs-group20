@@ -87,6 +87,10 @@ int identify_command(char input[])
 	{
 		process_command(8,input);	
 	}
+	else if(strcmp(ch,"freelist")==0)
+	{
+		process_command(9,input);	
+	}
 	else if(strcmp(ch,"unmount")==0)
 	{
 		process_command(5,input);	
@@ -171,7 +175,7 @@ int process_command(int i,char input[]){
 			{
 				
 				//create_vfs(name,size);
-				puts("\nData Displayed.");
+				//puts("\nData Displayed.");
 
 			}
 			else
@@ -234,6 +238,22 @@ int process_command(int i,char input[]){
 			else
 			{
 				puts("\nInvalid use of rm:rm <path/filename:without space>");
+			}
+
+
+			break;
+
+		case 9 :
+			if( validate_freelist()==1)
+			{
+				
+				//create_vfs(name,size);
+				puts("\nFile Deleted.");
+
+			}
+			else
+			{
+				puts("\nInvalid use of freelist:freelist");
 			}
 
 

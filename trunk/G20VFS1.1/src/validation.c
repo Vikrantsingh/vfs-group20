@@ -228,5 +228,20 @@ int validate_memory_statistics(char input[])
 
 }
 
+/*
+ */
+int validate_freelist(char input[])
+{
+	if(IS_VFS_MOUNTED==0)
+	{
+		printf("\nFirst Mount VFS\n ");
+		return 0;
+	}
+
+	 return display_freelist();
+
+
+}
+
 
 /*--------EOF--------*/

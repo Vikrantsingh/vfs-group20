@@ -15,4 +15,8 @@ long int  get_new_node();
 */
 int delete_node(long int);
 
+/*
+	Display Free List
+*/
 
+int display_freelist();
