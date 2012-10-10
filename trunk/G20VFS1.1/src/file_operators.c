@@ -12,6 +12,7 @@
 #include "../include/freelist.h"
 #include "../include/string_operations.h"
 #include "../include/hashtable.h"
+#include "../include/directory_operators.h"
 
 /*
 	Add data to blocks.
@@ -29,6 +30,8 @@ long int add_data_blocks(char data[],long int start)
 	{
 		printf("Free Space Not Available");
 		return -1;
+		  
+		
 	}
 	else
 	{
@@ -136,16 +139,45 @@ int create(char dest_dir[],char file_name[],char data[])
 	}
 
 
+	char *dir_struct[25];//limiting max sub directory level to 25  
+	int i,total_dir_in_path;
+	
+	//tokenizing path
+	i = separate_path(dir_struct,dest_dir,&total_dir_in_path);
+	 
+ 	if(i==0)
+	{
+   	     puts("Unable to process path");
+	     return 0;
+	}
+	
+	 //resolve path and find immediate parent
+	struct file_descriptor parent_data;
+    long int parent = get_Parent_File_Descriptor_Location(dir_struct,total_dir_in_path,&parent_data);
+	if(parent==0)
+	{
+		puts("path not found");
+		return 0;
+	}
+	
+	
+	
 	struct file_descriptor file_desp,temp;
 	//Storing File Desp data in Struct variable
 	strcpy(file_desp.file_name,file_name);
+	//////////////Store Path
+	strcpy(file_desp.file_location_full_path,dest_dir);
 	file_desp.isfull='1';//0-empty 1-full
 	file_desp.location_block_number=-1;
 	file_desp.FID= METADATA.counter + 1;
+	file_desp.sibling=parent_data.child;
+	file_desp.child=-1;
+	file_desp.parent=parent;///back link to immediate parent dir
 	file_desp.file_size=strlen(data);
+	strcpy(file_desp.file_type,"file"); /////////edit this: extract file type from file name
 	FILE *fp = VFS_MOUNT_POINT;
 	fseek(fp,METADATA.File_descriptor_array,SEEK_SET);
-	int i;
+	
 	long int location_of_new_FD=-1;
 	//search free space in header to add file desp..
 	for(i=0;i<METADATA.max_no_of_file_desp_available;i++)
@@ -156,6 +188,13 @@ int create(char dest_dir[],char file_name[],char data[])
 			fseek(fp,-sizeof(temp),SEEK_CUR);
 			location_of_new_FD = ftell(fp);
 			fwrite(&file_desp,sizeof(file_desp),1,fp);
+			
+		//also add link to parent
+			
+			parent_data.child=ftell(fp)-sizeof(temp);
+			fseek(fp,parent,SEEK_SET);
+			fwrite(&parent_data,sizeof(parent_data),1,fp);
+				
 			break;
 		}
 	}
@@ -196,6 +235,11 @@ int create(char dest_dir[],char file_name[],char data[])
 			//location_of_new_FD = ftell(fp);
 			fwrite(&file_desp,sizeof(file_desp),1,fp);
 		
+		///////////UPDATE HASH TABLE/////////////////////////////
+		insert_in_hashtable(file_desp.file_name,file_desp.file_location_full_path);
+
+		
+		
 	}
 	else //no free space found to add fd
 	{
@@ -203,19 +247,7 @@ int create(char dest_dir[],char file_name[],char data[])
 		//return 0;
 	}
 
-	//puts("\nDisplay blocks");
-	//////////////Logic to display data.......................
-	/*long int loc=file_desp.location_block_number;
-	while(loc!=-1)
-	{	
-		struct block t = read_data_blocks(loc);
-		display_data_blocks(t);
-		loc=t.next;
-		printf("start %ld, loc=%ld",file_desp.location_block_number,loc);
-		
-	}
-	//puts("\nCalling add blocks.done");
-	*/
+
 
 	return 1;
 }
@@ -224,7 +256,7 @@ int create(char dest_dir[],char file_name[],char data[])
 /*
 	Search file and return FD location
 */
-long int  search_File(char file_name[])
+long int  search_File(char file_path[])
 {
 	int i;
 	FILE *fp = VFS_MOUNT_POINT;
@@ -233,6 +265,56 @@ long int  search_File(char file_name[])
 	fseek(fp,METADATA.File_descriptor_array,SEEK_SET);
 
 	puts("Searching file");
+	
+		
+	////////////////////////
+	char *dir_struct[25];//limiting max sub directory level to 25  
+	int total_dir_in_path;
+	
+	//puts("In listdir");
+	//tokenizing path
+	i = separate_path(dir_struct,file_path,&total_dir_in_path);
+	
+	if(i==0)
+	{
+   	     puts("Unable to process path");
+	     return -1;
+	}
+  //resolve path and find immediate parent
+
+//  	     puts("break");  return -1;
+
+    struct file_descriptor parent_data;
+    long int parent = get_Parent_File_Descriptor_Location(dir_struct,total_dir_in_path-1,&parent_data);
+    
+    
+    if(parent==0||parent==-1)
+    {
+        puts("path not found");
+        return -1;
+    }
+  
+	
+	long int add=parent_data.child;
+	
+	while(add!=-1)
+	{
+	    fseek(fp,add,SEEK_SET);
+    
+        fread(&temp,sizeof(temp),1,fp);
+    
+       // puts(temp.file_name);
+
+       if(strcmp(temp.file_name,dir_struct[total_dir_in_path-1])==0)
+        {
+        	return (ftell(fp)-sizeof(temp));
+        }
+        add=temp.sibling;        	
+	}
+	
+    return -1;	
+	
+	/*
 	for(i=0;i<METADATA.max_no_of_file_desp_available;i++)
 	{
 		fread(&temp,sizeof(temp),1,fp);
@@ -256,7 +338,7 @@ long int  search_File(char file_name[])
 	}
 	
 	return (ftell(fp)-sizeof(temp));
-	
+	*/
 
 }
 
@@ -271,11 +353,70 @@ int listfile(char file_path[],char file_name[])
 	long int loc;
  	int i;
  	//puts("Searching file");
-	loc=search_File(file_name);
-	//////////////Logic to display data.......................
-	if(loc==-1) {puts("File Not Found!"); return 0;}
-	fseek(fp,loc,SEEK_SET);//Jump to FD
+	//loc=search_File(file_name);
+	puts(file_path);
+	///////////////////////
+	char *dir_struct[25];//limiting max sub directory level to 25  
+	int total_dir_in_path;
+
+	//tokenizing path
+	i = separate_path(dir_struct,file_path,&total_dir_in_path);
+	
+	 
+	if(i==0)
+	{
+   	     puts("Unable to process path");
+	     return -1;
+	}
+  //resolve path and find immediate parent
+    struct file_descriptor parent_data;
+
+    long int parent = get_Parent_File_Descriptor_Location(dir_struct,total_dir_in_path,&parent_data);
+
+    if(parent==0||parent==-1)
+    {
+        puts("path not found");
+        return -1;
+    }
+ 	
+    loc = parent_data.child;
+    temp = parent_data;
+   //Now search for file in that directory
+   while(loc!=-1)
+   {
+    fseek(fp,loc,SEEK_SET);//Jump to FD
 	fread(&temp,sizeof(temp),1,fp);//Read FD
+    if(strcmp(temp.file_name,file_name)==0)
+    {
+        break;
+    }
+    else
+    {
+        loc=temp.sibling;
+    }
+   }
+   if(loc==-1)
+   {
+        puts("File not Found");
+        return -1;
+   }
+   
+   puts("File Found");
+   
+    	
+	//////////////Logic to display data.......................
+	//if(loc==-1) {puts("File Not Found!"); return 0;}
+	//fseek(fp,loc,SEEK_SET);//Jump to FD
+	//fread(&temp,sizeof(temp),1,fp);//Read FD
+	
+	////////////check for valid file
+	
+	/*if(strcmp(temp.file_type,"file")!=0)
+	{
+	    puts("Cannot Display");
+	    return 0;
+	}
+	*/
 	loc=temp.location_block_number; //starting data block location
 	if(loc==-1) {puts("File Empty");}
 	while(loc!=-1)
@@ -298,17 +439,78 @@ int list(char file_path[])
 {
 	FILE *fp = VFS_MOUNT_POINT;
 	struct file_descriptor temp;
-	fseek(fp,METADATA.File_descriptor_array,SEEK_SET);
 	int i;
-	//puts("\nFile List :");
+	puts("\nFile List :");
+	
+	
+	////////////////////////
+	char *dir_struct[25];//limiting max sub directory level to 25  
+	int total_dir_in_path;
+	
+	//puts("In listdir");
+	//tokenizing path
+	i = separate_path(dir_struct,file_path,&total_dir_in_path);
+	
+	if(i==0)
+	{
+   	     puts("Unable to process path");
+	     return 0;
+	}
+  //resolve path and find immediate parent
+    struct file_descriptor parent_data;
+    long int parent = get_Parent_File_Descriptor_Location(dir_struct,total_dir_in_path,&parent_data);
+    
+    
+    if(parent==0)
+    {
+        puts("path not found");
+        return 0;
+    }
+  
+	
+	long int add=parent_data.child;
+	
+	while(add!=-1)
+	{
+	    fseek(fp,add,SEEK_SET);
+    
+        fread(&temp,sizeof(temp),1,fp);
+    
+       // puts(temp.file_name);
+
+       if(strcmp(temp.file_type,"dir")==0)
+        {
+        	printf("%c[%d;%dm %s/ %c[%dm\n",27,1,33,temp.file_name,27,0);
+        }
+        else
+        {
+        	printf(" %s\n",temp.file_name);
+        }	
+   
+        add=temp.sibling;    
+    	
+	}
+	
+	/*
+	
+	//////// List All --old logic
+	
 	for(i=0;i<METADATA.max_no_of_file_desp_available;i++)
 	{
 		fread(&temp,sizeof(temp),1,fp);
 		if(temp.isfull=='1')
 		{
-			printf("\nName : %s, FILE ID : %ld",temp.file_name,temp.FID);
+			
+			//printf("\nName : %s, FILE ID : %ld",temp.file_name,temp.FID);
+			if(strcmp(temp.file_type,"dir")==0)
+    			printf("\n%c[%d;%dm %s %c[%dm",27,1,33,temp.file_name,27,0);//to print colored text
+            	//printf("\n%c[%d;%dm %s %c[%dm FID : %ld",27,1,33,temp.file_name,27,0,temp.FID);
+    			//printf("\n %s, FID : %ld",temp.file_name,temp.FID);
+    		else
+    			printf("\n %s ",temp.file_name);
 		}
 	}
+	*/
 	
 
  return 1;
@@ -331,22 +533,78 @@ Remove a file specified by <file_path>.
 int rm(char file_path[])
 {
 	FILE *fp = VFS_MOUNT_POINT;
-	struct file_descriptor temp;
+	struct file_descriptor temp,temp2;
 	long int loc;
  	int i;
  	//puts("Searching file");
 	loc=search_File(file_path);
-	//////////////Logic to display data.......................
+	//////////////Logic to delete file.......................
 	if(loc==-1) {puts("File Not Found!"); return 0;}
 
 	fseek(fp,loc,SEEK_SET);//Jump to FD
 	fread(&temp,sizeof(temp),1,fp);//Read FD
+
+	
+	////////////check for valid file
+	
+	if(strcmp(temp.file_type,"file")!=0)
+	{
+	    puts("Cannot DELETE");
+	    return 0;
+	}
+	
+
 	temp.isfull='0';//reseting flag
 	fseek(fp,loc,SEEK_SET);//Jump to FD
 	fwrite(&temp,sizeof(temp),1,fp);//reset/clear FD
 	
 
 	METADATA.no_of_file_desp_used--;//uPDATE mETADATA
+
+
+    ///Update parent and siblings
+    
+    long int add= temp.parent;
+    if(add!=-1)    
+    {
+          fseek(fp,add,SEEK_SET);
+          
+	      fread(&temp2,sizeof(temp2),1,fp);//Read FD
+	     
+	      if(temp2.child==loc)
+	      {
+	          temp2.child=temp.sibling;
+              fseek(fp,-sizeof(temp2),SEEK_CUR);
+	          fwrite(&temp2,sizeof(temp2),1,fp);//write FD
+
+	      }
+	 
+	      else
+	      {
+	      
+	        add=temp2.child;
+            while(add!=-1)
+            {
+        
+                fseek(fp,add,SEEK_SET);//Jump to FD
+        	    fread(&temp2,sizeof(temp2),1,fp);//Read FD
+        	    if(temp.sibling==loc)
+        	    {
+        	           fseek(fp,-sizeof(temp2),SEEK_CUR);
+        	           temp2.sibling=temp.sibling;
+        	           fwrite(&temp2,sizeof(temp2),1,fp);//write FD
+	        
+        	    }
+                add=temp.sibling;
+            }
+    
+	      
+	      }   
+	
+	}  
+    
+    
+
 	///Now Removing blocks
 	
 	loc=temp.location_block_number; //starting data block location
@@ -363,8 +621,18 @@ int rm(char file_path[])
 
  return 1;
 }
+/*
 
-
+Search file in hash table
+*/
+int find_file(char name[])
+{
+    //int a,b;
+    //hash(name[0],name[1],&a,&b);
+    find_in_hashtable(name);
+    //puts("File found");
+    return 1;
+}
 /*
 Rename <source_file_path> to
 <dest_file_path> file.

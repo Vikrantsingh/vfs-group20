@@ -28,11 +28,14 @@ struct Meta_header{
 struct file_descriptor{
 	char isfull;//0-empty 1-full
 	long int FID;
-	char file_name[20];
-	//char location_full_path[50];
+	char file_name[50];
+    char file_location_full_path[200];
 	char file_type[5];
 	long int file_size;
 	long int location_block_number;//location of first data block
+	long int sibling;
+	long int child;
+	long int parent;
 
 };
 
@@ -45,9 +48,29 @@ struct free_list {
 
 struct block{
 	char isfull;//0-empty 1-full
-	char data[20];
+	char data[1024];
 	long int next; 
 };
+
+struct nary{
+
+    char name[50];
+    long int FD;
+    struct nary *child;
+    struct nary *sibling;
+
+};
+
+struct hashtable{    /////////node--for chaining 
+    
+   char name[50];
+   char path[200];
+   struct hashtable *nextnode;
+   
+};
+
+
+
 
 /*
 Global Variables Across all the files
@@ -57,5 +80,8 @@ extern struct Meta_header METADATA;
 extern long int MAX_VFS_SIZE;
 extern long int MAX_LENGTH_OF_NAME;
 extern int IS_VFS_MOUNTED; //1-YES 0-NO
+extern struct nary *NARY_ROOT;
+extern char PRESENT_WORKING_DIRECTORY[10000];
+extern struct hashtable *HASH_TABLE[26][26];
 
 

@@ -20,10 +20,21 @@ struct Meta_header METADATA;
 long int MAX_VFS_SIZE;
 long int MAX_LENGTH_OF_NAME;
 int IS_VFS_MOUNTED; //1-YES 0-NO
+struct nary *NARY_ROOT;
+char PRESENT_WORKING_DIRECTORY[10000];
+struct hashtable *HASH_TABLE[26][26];
+
+
 void main()
 {
+
+       
 	char name[]="demo.dat";
 
+    /////////INITIALIZATION
+    
+    strcpy(PRESENT_WORKING_DIRECTORY,"");
+    
 	MAX_VFS_SIZE=1000000000;
 
 	MAX_LENGTH_OF_NAME=50;
@@ -31,21 +42,16 @@ void main()
 	IS_VFS_MOUNTED=0;
 
 	long int size = 2000000000;
+    int i,j;
+    for(i=0;i<26;i++)
+        for(j=0;j<26;j++)
+            HASH_TABLE[i][j]=NULL;
+
+
 
 	printf("\n======= Virtual File System ========\n");
 
-
 	get_command();
-/*
-create_vfs(name,size);
-	mount_vfs(name);
-	create("/","abc.txt","Hello This is our first sample data ");
-	create("/","xyz.txt","Hello This is our second sample data ");
-	//import()
-	listfile("/");
-	unmount_vfs();
-*/
-
-
+ 
 
 }

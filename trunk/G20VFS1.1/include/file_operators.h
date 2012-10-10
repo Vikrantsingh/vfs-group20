@@ -65,7 +65,7 @@ int display_data_blocks(struct block);
 /*
 	Search file and return FD location
 */
-long int search_File(char file_name[]);
+long int search_File(char file_path[]);
 
 
 /*--------EOF------*/

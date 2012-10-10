@@ -33,9 +33,10 @@ int memory_statistics()
 
 	printf("\nAdded Padding of size = %ld Bytes",unoccupied_space);
 	printf("\nTotal size = %ld Bytes",meta_size+(file_desp_size * METADATA.max_no_of_file_desp_available)+(METADATA.no_of_blocks*block_size)+unoccupied_space);
-	
+	printf("\nDebug info:");
+	printf("\nFD Pointer = %ld Bytes",METADATA.File_descriptor_array);
 	printf("\nFreelist Pointer = %ld Bytes",METADATA.freelist);
-	
+
 	puts("\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");	
 	return 1;
 }
@@ -60,9 +61,9 @@ int create_vfs(char vfs_label[],long int size)
 	
         //--------------- Creating Meta Data
 	struct Meta_header meta,meta1;
-	strcpy(meta.label,vfs_label);
+	strcpy(meta.label,vfs_label);//copy VFS Name
 	meta.vfs_size=size;
-	meta.no_of_file_desp_used=0;
+	meta.no_of_file_desp_used=1;
 	meta.no_of_blocks_used=0;
 	//meta.max_no_of_file_desp_available=1000;
 	meta.max_no_of_file_desp_available=(meta.vfs_size/(sizeof(struct block)+sizeof(struct file_descriptor)));
@@ -88,19 +89,39 @@ int create_vfs(char vfs_label[],long int size)
 	//-------------allocating space for header 
 	fseek(fp,meta.File_descriptor_array,SEEK_SET);
 	struct file_descriptor file;
-	file.isfull='0';//0-empty 1-full
+	
 	/*
-	Rest All Garbage will be stored
+	char isfull;//0-empty 1-full
 	long int FID;
-	char file_name[50];
-	char location_full_path[50];
+	char file_name[20];
+	//char location_full_path[50];
 	char file_type[5];
 	long int file_size;
-	long int location_block_number;
+	long int location_block_number;//location of first data block
+	long int sibling;
+	long int child;
 	*/
-	long int i;	
+	long int i;
+	file.FID=0;
+	file.isfull='1';//0-empty 1-full
+  	file.sibling=-1;
+	file.child=-1;
+	file.parent=-1;
+	file.location_block_number=-1;
+	file.file_size=0;
+	strcpy(file.file_type,"dir");//default extension
+	strcpy(file.file_name,"root");//deafault one FD allocated for Root
+	strcpy(file.file_location_full_path,"root");//deafault one FD allocated for Root
+	if(fwrite(&file,sizeof(file),1,fp)==1)	//writing File Descriptor for Root Directory
+	{
+		//printf("\nloc =%ld",ftell(fp));
+	//	printf("\nheader Written to file...");
+	}
+	//reset FD
+	file.isfull='0';//0-empty 1-full
+	strcpy(file.file_name,"");
 	printf("\nWritting File Descriptor (Header) to file...");
-	for(i=0;i<meta.max_no_of_file_desp_available;i++)
+	for(i=0;i<meta.max_no_of_file_desp_available-1;i++)
 	if(fwrite(&file,sizeof(file),1,fp)==1)
 	{
 		//printf("\nloc =%ld",ftell(fp));
@@ -169,8 +190,22 @@ int mount_vfs(char name[])
 	if(fread(&METADATA,sizeof(METADATA),1,fp)==1)
 	{}
 	
-	///Create Hash Table....
+	////Change PWD
+	
+	strcpy(PRESENT_WORKING_DIRECTORY,"root/");
+	
+
+	
 	///Create N - Ary Tree....
+	
+    NARY_ROOT=NULL;
+	create_nary(METADATA.File_descriptor_array);
+	display_nary(NARY_ROOT);
+
+	///Create Hash Table....
+	puts("creating hash table");
+	//display_hashtable();
+
  
 	return 1;
 }
@@ -181,6 +216,9 @@ and tree information back into the hard disk.
 */
 int unmount_vfs()
 {
+
+    strcpy(PRESENT_WORKING_DIRECTORY,"");
+    
 	rewind(VFS_MOUNT_POINT);	
 	if(fwrite(&METADATA,sizeof(METADATA),1,VFS_MOUNT_POINT)==1)
 	{}

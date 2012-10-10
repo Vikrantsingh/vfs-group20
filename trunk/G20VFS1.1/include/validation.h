@@ -33,4 +33,18 @@ int validate_memory_statistics(char input[]);
 /*
  */
 int validate_rm_file(char input[]);
+
+/*
+
+*/
+int validate_mkdir(char input[]);
+/*
+
+*/
+int validate_change_dir(char input[]);
+/*
+
+*/
+int validate_find(char input[]);
+
 /*--------EOF--------*/

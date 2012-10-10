@@ -6,11 +6,15 @@
 
 /*
 */
-int create_hash_table();
+void hash(char name[],int *a,int *b);
 
-/*
- */
-int search_file_in_hash_table(char input[]);
+void insert_in_hashtable(char name[],char path[]);
+
+void find_in_hashtable(char name[]);
+
+
+void display_hashtable();
+
 
 
 /*--------EOF--------*/

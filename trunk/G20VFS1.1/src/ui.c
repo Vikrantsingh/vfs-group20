@@ -25,27 +25,39 @@ int get_command()
 		//printf("%c[%d;%d;%dm Hello",27,1,33,40);
 
 		//printf("%c[%d;%dmHello World%c[%dm\n",27,1,31,27,0);
-		if(IS_VFS_MOUNTED==0)
-			printf("\nVFS-G20 # ");
-		else
-			printf("\nVFS-G20 @ %s # ",METADATA.label);
+		
+		do{
+		
+			if(IS_VFS_MOUNTED==0)
+				printf("\nVFS-G20 # ");
+			else
+				printf("\nVFS-G20 @ %s : ~ %s # ",METADATA.label,PRESENT_WORKING_DIRECTORY);
 
-		gets(input);
+			gets(input);
+			//fgets(input,MAX_INPUT_COMMAND_SIZE,stdin);
+			//scanf("%[^\n]s",input);
+			//fflush(stdout);
+			//puts(input);
+
+		}while(strlen(input)==0);
+		
 
 		if(strcmp(input,"exit")==0)
 			break;
 
 		else if(strcmp(input,"man")==0)
 			man();
-
-		if(identify_command(input))
-			{
+			
+        else
+        {
+		    if(identify_command(input))
+			    {
 				//do nothing...since task is completed by validate...command
-			}
+		    	}
 
-		else
-			printf("%s - command not available",input);
-
+    		else
+	    	printf("%s - command not available",input);
+         }	
 		
 	}
 	puts("\nbye...");
@@ -90,6 +102,26 @@ int identify_command(char input[])
 	else if(strcmp(ch,"freelist")==0)
 	{
 		process_command(9,input);	
+	}
+	else if(strcmp(ch,"mkdir")==0)
+	{
+		process_command(10,input);	
+	}
+	else if(strcmp(ch,"listdir")==0)
+	{
+		process_command(11,input);	
+	}
+	else if(strcmp(ch,"cd")==0)
+	{
+		process_command(12,input);	
+	}
+	else if(strcmp(ch,"find")==0)
+	{
+		process_command(13,input);	
+	}
+	else if(strcmp(ch,"pwd")==0)
+	{
+		puts(PRESENT_WORKING_DIRECTORY);	
 	}
 	else if(strcmp(ch,"unmount")==0)
 	{
@@ -166,7 +198,7 @@ int process_command(int i,char input[]){
 			}
 			else
 			{
-				puts("\nInvalid use of create:create<path/filename:without space> <data>");
+				puts("\nInvalid use of create:create <path> <filename:without space> <data>");
 			}
 
 			break;
@@ -260,6 +292,74 @@ int process_command(int i,char input[]){
 			break;
 
 
+		case 10 :
+			if( validate_mkdir(input)==1)
+			{
+				
+				 
+				puts("\nDirectory Created.");
+
+			}
+			else
+			{
+				puts("\nInvalid use of mkdir:mkdir <path>");
+			}
+
+
+			break;
+
+
+
+		case 11 :
+			if( validate_listdir(input)==1)
+			{
+				
+		 		puts("\nDirectory Listed.");
+
+			}
+			else
+			{
+				puts("\nInvalid use of listdir:listdir <path>");
+			}
+
+
+			break;
+
+
+		case 12 :
+			if( validate_change_dir(input)==1)
+			{
+				
+		 		puts("\nDirectory Changed.");
+
+			}
+			else
+			{
+				puts("\nInvalid use of cd: <path>");
+			}
+
+
+			break;
+
+
+
+		case 13 :
+			if( validate_find(input)==1)
+			{
+				
+		 		puts("\nFiles Listed.");
+
+			}
+			else
+			{
+				puts("\nInvalid use of find: <filename>");
+			}
+
+
+			break;
+
+
+
 		default :
 			puts("\nSorry, This Command not available..");
 
@@ -292,13 +392,16 @@ int man()
 	puts("\n=============================================");
 	puts("\nVFS - G20 : User Command Manual");
 	puts("\n=============================================");
-	puts("man - for help");
-	puts("create_vfs <vfs name> <size> : To create New VFS");
-	puts("mount <vfs name> : To mount vfs");
-	puts("create <filpath/filename> <data> : To create a file in mounted VFS");
-	puts("listfile <path> : To display content of file");
-	puts("listfile <path> : To list all files in given path");
-	puts("unmount : To unmount current mounted VFS");
+	puts("man - for help.");
+	puts("create_vfs <vfs name> <size> : To create New VFS.");
+	puts("mount <vfs name> : To mount vfs.");
+	puts("create <filpath> <filename> <data> : To create a file in mounted VFS.");
+	puts("mkdir <path> <dir name> : To create new directory in given path.");
+	puts("listfile <path> : To display content of file.");
+	puts("list <path> : To list all files in given path.");
+	puts("rm <path> : To delete file in given path.");
+	puts("listdir <path> : To display n-ary for given path.");
+	puts("unmount : To unmount current mounted VFS.");
 	puts("exit - to terminate application.");
 
 }

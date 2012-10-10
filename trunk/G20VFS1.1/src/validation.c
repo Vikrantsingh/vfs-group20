@@ -119,32 +119,39 @@ int validate_create_file(char input[])
 		printf("\nFirst Mount VFS\n ");
 		return 0;
 	}
-	char temp[10000],*ch,*name,*data;	
+	char temp[10000],*ch,*name,*data,*path ;	
 	int i=0;
 	strcpy(temp,input);
-	ch = strtok(temp, " ");	
+	ch = strtok(temp," ");	
+
+	path = strtok(NULL," "); //check path of file
+
+	if(path == NULL)
+		return 0;
 	
-	name = strtok(NULL, " "); //check name of file
+	name = strtok(NULL," "); //check name of file
 
 	if(name == NULL)
-		return 0;
-
+	{
+	        ////////////////////now consider 2nd parameter as name and use defaultpath
+	    //name=path;
+	    //strcpy(default_path,PRESENT_WORKING_DIRECTORY);
+    	//path=default_path;
+	    
+	    return 0;
+    }
 	printf("\nName of File=%s",name);
 
-	int from =strlen("create ") + strlen (name);
+	int from =strlen("create ") +strlen(path)+1+ strlen (name) + 1; //1 for space
 	int length = strlen(input) - from;
 	data = sub_string(input,from,length);
-	//data=strstr(input," ");//remove create comm
-
-//	data=strstr(data," "); //remove filename
-//
- //	data=strstr(data," ");
-	puts("\ndata");
-	puts(data);
-	//if( strtok(NULL, " ") != NULL)  //any extra arguments
-	//	return 0;	
 	
-	return create("/",name,data);
+	puts("\ndata");
+	puts(path);
+	puts(name);
+	puts(data);
+	
+	return create(path,name,data);
 	//return create("/","xyz.txt","Hello This is our second sample data ");
 }
 
@@ -158,7 +165,7 @@ int validate_list_file(char input[])
 		return 0;
 	}
 
-	char temp[100];
+	/*char temp[100];
 	strcpy(temp,input);
 	char *file_name = strtok(temp, " ");	
 	
@@ -169,7 +176,35 @@ int validate_list_file(char input[])
 		puts("File Name cannot be empty");
 		return 0;
 	}
-	 return listfile("/",file_name);
+	 return listfile("root",file_name);
+	 */
+	
+	 
+	char temp[1000],default_path[1000],*file_name;
+	strcpy(temp,input);
+	char *path = strtok(temp, " ");	
+	
+	path = strtok(NULL, " "); //get path
+	if(path == NULL)//check path	
+	{
+	    puts("Too few parameter");
+	    return -1;
+	}
+
+    file_name = strtok(NULL, " "); //get name of file	
+	if(file_name == NULL)//check path
+	{
+        strcpy(file_name,path);
+		//puts("Path cannot be empty");
+		strcpy(default_path,PRESENT_WORKING_DIRECTORY);
+    	path=default_path;
+        
+		//return 0;
+	}
+	//puts(path);
+
+	 return listfile(path,file_name);
+
 
 
 }
@@ -183,7 +218,22 @@ int validate_list(char input[])
 		return 0;
 	}
 
-	 return list("/");
+	char temp[1000],default_path[1000];
+	strcpy(temp,input);
+	char *path = strtok(temp, " ");	
+	
+	path = strtok(NULL, " "); //get path
+
+	if(path == NULL)//check path
+	{
+		//puts("Path cannot be empty");
+		strcpy(default_path,PRESENT_WORKING_DIRECTORY);
+    	path=default_path;
+
+		//return 0;
+	}
+	//puts(path);
+	 return list (path);
 
 
 }
@@ -241,6 +291,159 @@ int validate_freelist(char input[])
 	 return display_freelist();
 
 
+}
+
+
+/*
+
+*/
+int validate_mkdir(char input[])
+{
+
+	if(IS_VFS_MOUNTED==0)
+	{
+		printf("\nFirst Mount VFS\n ");
+		return 0;
+	}
+	//puts("in validate mkdir");
+
+	//token separation
+	char temp[1000],*ch,*name,*path,default_path[1000];	
+	int i=0;
+	
+	strcpy(temp,input);
+	
+	ch = strtok(temp, " ");	//return command
+	
+	path = strtok(NULL, " "); //check name args
+	
+	if(path == NULL)
+	{
+		puts("Please Enter Destination Path");
+		return 0;
+	}
+
+	name = strtok(NULL, " "); //check name of new directory
+
+	if(name == NULL)
+	{
+	
+        ////////////////////now consider 2nd parameter as name and use defaultpath
+	    name=path;
+	    strcpy(default_path,PRESENT_WORKING_DIRECTORY);
+    	path=default_path;
+	    
+	
+		//puts("Please Enter New Directory Name");
+		//return 0;
+	}
+
+// 	puts(name);
+// 	puts(path);
+	
+	
+	return makedir(path,name);
+	
+
+}
+
+/*
+ */
+int validate_listdir(char input[])
+{
+	if(IS_VFS_MOUNTED==0)
+	{
+		printf("\nFirst Mount VFS\n ");
+		return 0;
+	}
+
+
+	char temp[1000],default_path[1000];
+	strcpy(temp,input);
+	char *path = strtok(temp, " ");	
+	
+	path = strtok(NULL, " "); //get path
+
+	if(path == NULL)//check path
+	{
+	//	puts("Path cannot be empty");
+		
+		strcpy(default_path,PRESENT_WORKING_DIRECTORY);
+    	path=default_path;
+    //return 0;
+	}
+
+	//puts(path);
+	return listdir (path,"ls-li");
+
+
+}
+
+
+/*
+ */
+int validate_change_dir(char input[])
+{
+	if(IS_VFS_MOUNTED==0)
+	{
+		printf("\nFirst Mount VFS\n ");
+		return 0;
+	}
+
+
+	char temp[1000],default_path[1000];
+	strcpy(temp,input);
+	char *path = strtok(temp, " ");	
+	
+	path = strtok(NULL, " "); //get path
+
+	if(path != NULL)//check path
+	{
+	
+		
+		strcpy(PRESENT_WORKING_DIRECTORY,path);
+    	path=default_path;
+        return 1;
+	}
+    else
+    {
+    	puts("Path cannot be empty");
+        return -1;
+    }
+	//puts(path);
+	
+}
+
+
+/*
+ */
+int validate_find(char input[])
+{
+	if(IS_VFS_MOUNTED==0)
+	{
+		printf("\nFirst Mount VFS\n ");
+		return 0;
+	}
+
+
+	char temp[1000];
+	strcpy(temp,input);
+	char *name = strtok(temp, " ");	
+	
+	name= strtok(NULL, " "); //get path
+
+	if(name != NULL)//check path
+	{
+
+        return find_file(name);
+	}
+    else
+    {
+    	puts("File name cannot be empty");
+        return -1;
+    }
+	//puts(path);
+	
 }
 
 
