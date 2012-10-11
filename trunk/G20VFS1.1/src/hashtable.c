@@ -12,6 +12,7 @@
 #include "../include/hashtable.h"
 #include "../include/nary.h"
 #include "../include/directory_operators.h"
+#include "../include/bst.h"
 
 void hash(char name[],int *a,int *b){
 
@@ -31,6 +32,12 @@ void insert_in_hashtable(char file_name[],char file_path[])
     printf("\nGot NAme: %s Path: %s",file_name,file_path);    
 
     struct hashtable *temp,*cur;
+  	temp=(struct hashtable*)malloc(sizeof(struct hashtable));
+   	strcpy(temp->name,file_name);
+   	strcpy(temp->path,file_path);    	
+   
+    insert_into_bst(a, b,temp);
+    /*
     if(HASH_TABLE[a][b]==NULL)
     {
     	temp=(struct hashtable*)malloc(sizeof(struct hashtable));
@@ -56,6 +63,8 @@ void insert_in_hashtable(char file_name[],char file_path[])
     		cur->nextnode=temp;
     	}
     }
+    
+    */
 }
     
 
@@ -65,7 +74,8 @@ void find_in_hashtable(char search_name[])
     int a,b;
     
     hash(search_name,&a,&b);
-
+    search_bst(HASH_TABLE[a][b],search_name);
+    /*
     struct hashtable *cur;
     if(HASH_TABLE[a][b]==NULL)
         printf("no file\n");
@@ -89,6 +99,7 @@ void find_in_hashtable(char search_name[])
             puts("File not found");
         }
     }
+    */
      
 }
 
@@ -104,13 +115,7 @@ int i,j;
        {
          printf(" %C%C :",i+97,j+97);            
          cur=HASH_TABLE[i][j];
-         while(cur!=NULL)
-         {
-        
-	        printf(" Name: %s Path: %s",cur->name,cur->path);
-	        cur=cur->nextnode;
-	        
-         }
+         display_bst_all(cur); 
         }
         
       }

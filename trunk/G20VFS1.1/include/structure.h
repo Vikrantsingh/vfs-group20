@@ -61,11 +61,13 @@ struct nary{
 
 };
 
-struct hashtable{    /////////node--for chaining 
+struct hashtable{    /////////node--for chaining with BST structure 
     
    char name[50];
    char path[200];
-   struct hashtable *nextnode;
+   
+   struct hashtable *lnextnode;
+   struct hashtable *rnextnode;
    
 };
 

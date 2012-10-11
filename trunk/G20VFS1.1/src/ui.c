@@ -399,6 +399,7 @@ int man()
 	puts("mkdir <path> <dir name> : To create new directory in given path.");
 	puts("listfile <path> : To display content of file.");
 	puts("list <path> : To list all files in given path.");
+	puts("find <filename> : Searching files.");
 	puts("rm <path> : To delete file in given path.");
 	puts("listdir <path> : To display n-ary for given path.");
 	puts("unmount : To unmount current mounted VFS.");

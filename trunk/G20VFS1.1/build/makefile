@@ -1,5 +1,5 @@
-main.exe: freelist.o file_system.o file_operators.o directory_operators.o ui.o hashtable.o nary.o validation.o string_operations.o main.o
-	gcc bin/freelist.o bin/file_system.o bin/file_operators.o bin/directory_operators.o bin/ui.o  bin/hashtable.o bin/nary.o   bin/validation.o bin/string_operations.o bin/main.o -o bin/main.exe
+main.exe: freelist.o file_system.o file_operators.o directory_operators.o ui.o hashtable.o bst.o nary.o validation.o string_operations.o main.o
+	gcc bin/freelist.o bin/file_system.o bin/file_operators.o bin/directory_operators.o bin/ui.o  bin/hashtable.o bin/bst.o bin/nary.o   bin/validation.o bin/string_operations.o bin/main.o -o bin/main.exe
 
 freelist.o:src/freelist.c 
 	gcc -c src/freelist.c -o bin/freelist.o
@@ -20,6 +20,10 @@ ui.o: src/ui.c
 
 hashtable.o: src/hashtable.c
 	gcc -c src/hashtable.c -o bin/hashtable.o
+
+bst.o: src/bst.c
+	gcc -c src/bst.c -o bin/bst.o
+
 
 nary.o: src/nary.c
 	gcc -c src/nary.c -o bin/nary.o
