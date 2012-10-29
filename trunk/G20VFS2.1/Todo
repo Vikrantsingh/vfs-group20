@@ -1,0 +1,44 @@
+//////////////////////////////////////////
+//					                    //
+//		       VFS-G20	             	//		
+//					                    //
+//////////////////////////////////////////
+
+
+
+//----------------------------
+// To Do CheckList
+//----------------------------
+#create Robust VFS Structure(META,FREELIST,FD,BLOCK)........done
+#create File in VFS with multiple blocks data...........done
+#List file/dir............done
+#listdata inside file..............done
+#Validate malloc [check mem available for allocation in ram or not]
+#Validate fseek [reachable location]
+#Replace strcpy by strncpy [to avoid segmentation fault and array out of bound during copying string ]
+#Extract file extension
+#hash Table.............done
+#import/export file from external file system
+#file/dir copy/move
+#test script running.................done
+#list dir/file in path with color........done
+#create file under dir........done
+#check for file with same name in same dir....while creation
+#validate filename length
+#validate input command length
+#change dir.............done but cd.. remaining and validation for existence of path remaining
+#default path...........done
+#relative path.............no need
+
+#hashtable with number..(filename)
+#error code
+
+//----------------------------
+// Problem Faced / Resolved
+//----------------------------
+
+#Choosing Max_no_of_FD
+#fseek(long int) limiting VFS file size [jumping cluster*]
+#N-Ary with Back Link to Parent ///////for getting back complete path
+#Multiple block data storage
+#Reading command with space[tried char array,ptr, using  scanf(),gets(), finally getline()]
