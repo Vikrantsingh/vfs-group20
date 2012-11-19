@@ -1,0 +1,24 @@
+mountvfs demo6
+createvfs demo6
+createvfs demo6 10000
+createvfs demo6 1000
+mountvfs demo61
+mountvfs
+mountvfs demo6
+unmountvfs
+unmountvfs demo11
+unmountvfs demo6
+makedir /a/b/c/d/e/f/ ll
+mountvfs demo6
+makedir /a/b/c/d/e/f/
+makedir a/b/c/d/e/f/ ll
+makedir /a/b/c/d/e/f/ ll
+unmountvfs demo6
+mountvfs demo6
+movedir /a/b/c/ /a/b/c/d
+movedir /a/b/c/ /a/b
+deletedir
+deletedir /a
+deletedir /a/d/c/d
+deletedir /a/b/c/d/e/f/ll
+unmountvfs demo6

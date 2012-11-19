@@ -1,0 +1,19 @@
+createvfs_SUCCESS
+mountvfs_SUCCESS
+mountvfs_FAILURE  <VFS_ALREADY_MOUNTED>
+unmountvfs_FAILURE <ACCESS_DENIED>
+unmountvfs_SUCCESS
+mountvfs_SUCCESS
+deletedir_FAILURE <CANNOT_FIND_SPECIFIED_PATH_OR_DIR>
+makedir_SUCCESS
+makedir_FAILURE <INVALID_CHARACTER_IN_NAME> 
+movedir_FAILURE <CANNOT_FIND_SPECIFIED_DESTINATIONDIR>
+makedir_SUCCESS
+listdir_SUCCESS
+addfile_SUCCESS
+unmountvfs_SUCCESS
+mountvfs_SUCCESS
+listfile_FAILURE <NOT_A_TEXT_FILE>
+movefile_SUCCESS
+exportfile_SUCCESS
+unmountvfs_SUCCESS

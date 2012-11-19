@@ -1,0 +1,76 @@
+createvfs demo4 500
+mountvfs demo4 
+makedir /home d
+makedir /home a
+makedir /home/d demo
+listdir /home 1 outputdir 
+movedir /home/d/demo /home/a
+makedir /home/a demo
+listdir /home 1 outputdir 
+deletedir /home/a/demo
+listdir /home 1 outputdir 
+makedir /home/sub1 sub2
+addfile /home/sub1 demo.txt /usr/include/stdio.h
+searchfile demo.txt outputdir
+listdir /home 1 outputdir
+copyfile /home/sub1/demo.txt /home
+listdir /home 1 outputdir
+listfile /home/demo.txt viki.txt
+unmountvfs demo4
+createvfs demo4 100
+mountvfs demo4 
+searchfile demo.txt outputdir
+removefile /home/sub1/demo.txt
+listdir /home 1 outputdir
+listfile /home/demo.txt fout
+updatefile /home/demo.txt /usr/include/memory.h
+listfile /home/demo.txt fout2
+removefile /home/demo.txt
+searchfile demo outputdir
+makedir /a/b/c/d/e ab
+makedir /a/b/c f
+listdir / 1 outputdir
+deletedir /a/b/c/d
+listdir / 1 outputdir
+movedir /a/b /
+deletedir /a
+listdir / 1 outputdir
+unmountvfs demo4 
+createvfs demo4 500
+mountvfs demo4 
+makedir /home d
+makedir /home a
+makedir /home/d demo
+listdir /home 1 outputdir 
+movedir /home/d/demo /home/a
+makedir /home/a demo
+listdir /home 1 outputdir 
+deletedir /home/a/demo
+listdir /home 1 outputdir 
+makedir /home/sub1 sub2
+addfile /home/sub1 demo.txt /usr/include/stdio.h
+searchfile demo.txt outputdir
+listdir /home 1 outputdir
+copyfile /home/sub1/demo.txt /home
+listdir /home 1 outputdir
+listfile /home/demo.txt viki.txt
+unmountvfs demo4
+createvfs demo4 100
+mountvfs demo4 
+searchfile demo.txt outputdir
+removefile /home/sub1/demo.txt
+listdir /home 1 outputdir
+listfile /home/demo.txt fout
+updatefile /home/demo.txt /usr/include/memory.h
+listfile /home/demo.txt fout2
+removefile /home/demo.txt
+searchfile demo outputdir
+makedir /a/b/c/d/e ab
+makedir /a/b/c f
+listdir / 1 outputdir
+deletedir /a/b/c/d
+listdir / 1 outputdir
+movedir /a/b /
+deletedir /a
+listdir / 1 outputdir
+unmountvfs demo4 

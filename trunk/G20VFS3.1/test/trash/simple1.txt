@@ -1,0 +1,26 @@
+createvfs demo2 100000
+mountvfs demo2 
+makedir /a/b/c/d/e ab
+makedir /a/b/c f
+listdir / 1 outputdir
+deletedir /a/b/c/d
+listdir / 1 outputdir
+movedir /a/b /
+listdir / 1 outputdir
+addfile / abc.txt abc.txt
+listdir / 1 outputdir
+listfile abc.txt abc2.txt
+movefile /abc.txt /b/c
+listdir / 1 outputdir
+copyfile /b/c/abc.txt /b
+listdir / 1 outputdir
+listfile /b/abc.txt abc3.txt
+searchfile abc.txt outputdir
+listdir / 1 outputdir
+removefile /b/abc.txt
+searchfile abc.txt outputdir
+listdir / 1 outputdir
+updatefile /b/c/abc.txt hello.txt
+exportfile /b/c/abc.txt hello2.txt
+unmountvfs demo2
+

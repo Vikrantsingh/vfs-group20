@@ -1,0 +1,20 @@
+createvfs demo5 -1
+createvfs demo5 300
+mountvfs demo5
+addfile  /home demo.txt /usr/include/memory.h
+addfile  /home demo.txt
+makedir /
+makedir / home
+addfile  /home demo.txt /usr/include/memory.h
+copyfile
+copyfile /home/demo.jpg /demo.jpg
+copyfile /home/demo.txt /a/b/c/demo.txt
+copyfile /home/demo.txt /demo.txt
+movefile /demo.txt /home/a/b/d/demo.txt
+removefile /home
+removefile /home/demo.txt
+movefile /home demo.txt
+movefile /home
+movefile /demo.txt /home/demo.txt
+listdir / 1 outputdir
+unmountvfs demo5

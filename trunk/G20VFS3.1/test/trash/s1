@@ -1,0 +1,20 @@
+createvfs demo 9024
+mountvfs demo
+unmountvfs demo
+mountvfs demo
+makedir /home/sub1 sub2
+addfile /home/sub1 demo.txt abc.txt
+searchfile demo.txt outputdir
+listdir /home 1 outputdir
+copyfile /home/sub1/demo.txt /home
+listdir /home 1 outputdir
+listfile /home/demo.txt viki.txt
+searchfile demo.txt outputdir
+removefile /home/sub1/demo.txt
+listdir /home 1 outputdir
+listfile /home/demo.txt fout
+updatefile /home/demo.txt viki.txt
+listfile /home/demo.txt fout2
+removefile /home/demo.txt
+
+unmountvfs demo

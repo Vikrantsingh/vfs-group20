@@ -1,0 +1,20 @@
+createvfs demo7 1000
+mountvfs demo7
+mountvfs demo7
+addfile /home abc.h /usr/include/memory.h
+makedir / home
+addfile /home /usr/include/memory.h
+addfile /home abc.h /usr/include/memory.ht
+addfile /home abc.h /usr/include/memory.h
+makedir /home aa
+makedir /home/aa/bb cc
+copyfile /home/abc.h /home/aa/bb/cc/abc.h
+deletedir /home/aa/bb/cc
+removefile /home/aa/bb/cc/abc.h
+deletedir /home/aa/bb/cc
+deletedir /home/aa
+movefile 
+movefile /home/aa/bb
+movefile /home/aa/bb /home/abc.h
+movefile /home/abc.h /home/aa/bb/abc.h
+unmountvfs demo7

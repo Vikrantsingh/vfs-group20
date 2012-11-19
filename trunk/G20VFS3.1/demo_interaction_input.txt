@@ -1,0 +1,40 @@
+createvfs demo10 500
+mountvfs demo10
+makedir /
+listdir / 1 outputdir
+movedir /a/b /
+deletedir /a
+listdir / 1 outputdir
+makedir /home d
+makedir /home a
+makedir /home/d demo
+listdir /home 1 outputdir 
+movedir /home/d/demo /home/a
+makedir /home/a demo
+listdir /home 1 outputdir 
+deletedir /home/a/demo
+listdir /home 1 outputdir 
+makedir /home/sub1 sub2
+addfile /home/sub1 demo.txt /usr/include/stdio.h
+searchfile demo.txt outputdir
+listdir /home 1 outputdir
+copyfile /home/sub1/demo.txt /home/demo.txt
+listdir /home 1 outputdir
+listfile /home/demo.txt viki.txt
+searchfile demo.txt outputdir
+addfile  /home demo.txt /usr/include/memory.h
+addfile  /home demo.txt
+makedir /
+makedir / home
+addfile  /home demo.txt /usr/include/memory.h
+copyfile
+copyfile /home/demo.jpg /demo.jpg
+copyfile /home/demo.txt /a/b/c/demo.txt
+copyfile /home/demo.jpg /demo.jpg
+movefile /demo.txt /home/a/b/d/demo.txt
+removefile /home
+removefile /home/demo.txt
+movefile /home demo.txt
+movefile /home
+movefile /demo.txt /home/demo.txt 
+unmountvfs demo10
