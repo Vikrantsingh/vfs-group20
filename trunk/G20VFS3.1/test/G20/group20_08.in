@@ -9,7 +9,7 @@ movedir /home/abc.h /
 addfile /home abc.h /usr/include/stdio.h
 updatefile /home/abc.h /usr/include/memory.h
 copyfile /home/abc.h /abc.h
-listfile /home/abc.h abc.h
+listfile /home/abc.h /tmp/abc.h
 removefile /home/abc.h
 exportfile /home/abc.h
 unmountvfs demo8

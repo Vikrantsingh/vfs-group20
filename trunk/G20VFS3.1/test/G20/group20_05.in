@@ -16,5 +16,5 @@ removefile /home/demo.txt
 movefile /home demo.txt
 movefile /home
 movefile /demo.txt /home/demo.txt
-listdir / 1 outputdir
+listdir / 1 /tmp/outputdir
 unmountvfs demo5

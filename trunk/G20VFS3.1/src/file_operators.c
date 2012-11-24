@@ -13,7 +13,7 @@
 #include "../include/string_operations.h"
 #include "../include/hashtable.h"
 #include "../include/directory_operators.h"
-
+#include <dirent.h> 
 /*
 	Add data to blocks.
 */
@@ -118,7 +118,7 @@ int display_data_blocks(struct block b)
 	else
 	{
 
-		//puts("Data:");
+		//printf("\nData:");
 		printf("%s",b.data);
 		 
 	}
@@ -142,7 +142,7 @@ int create(char parent_path[],char file_name[],char infile[])
  	//check for space
 	if(METADATA.no_of_file_desp_used>=METADATA.max_no_of_file_desp_available-1)
 	{
-//		puts("\naddfile_FAILURE <FILE_SYSTEM_FULL>");
+//		printf("\n\naddfile_FAILURE FILE_SYSTEM_FULL");
    	  printf("\naddfile_FAILURE %s",ERR_VFS_ADDFILE_04);
 
 		return 0; 
@@ -161,7 +161,7 @@ int create(char parent_path[],char file_name[],char infile[])
 
     if(bstnode!=NULL)
     {
- //       puts("addfile_FAILURE <FILE_ALREADY_EXISTS>");
+ //       printf("\naddfile_FAILURE FILE_ALREADY_EXISTS");
     	  printf("\naddfile_FAILURE %s",ERR_VFS_ADDFILE_03);
 
         return 0;
@@ -171,28 +171,42 @@ int create(char parent_path[],char file_name[],char infile[])
 
     if(bstnode==NULL)
     {
-        puts("addfile_FAILURE <PATH_NOT_FOUND>");
+        printf("\naddfile_FAILURE PATH_NOT_FOUND");
 //   	  printf("\naddfile_FAILURE %s",ERR_VFS_ADDFILE_07);
         
         return 0;
     }
     
     parent = bstnode->nary_node;
+
+///////////check isdir for input file path
+	DIR *din = opendir(infile);
+	if(din!=NULL)
+	{
+	    printf("\naddfile_FAILURE NOT_A_FILE");
+	    close(din);
+	    return 0;
+	}
     
 
 	FILE *fin = fopen(infile,"rb");
 	if(fin==NULL)
 	{
-	    puts("addfile_FAILURE <CANNOT_OPEN_SPECIFIED_DATAFILE>");
+	    printf("\naddfile_FAILURE CANNOT_OPEN_SPECIFIED_DATAFILE");
 	    return 0;
 	}
 	fseek(fin,0,SEEK_END);
 	long int file_size = ftell(fin);
+//		printf("%ld",file_size);
+	//	puts(infile);
+	//while(1);
+	
+
 	struct block blockdata;	
     long int blocks_req = file_size / sizeof(blockdata.data);
     if(blocks_req >= (METADATA.no_of_blocks - METADATA.no_of_blocks_used))
     {
-        puts("addfile_FAILURE <FILE_SYSTEM_FULL>");
+        printf("\naddfile_FAILURE FILE_SYSTEM_FULL");
         return 0;
     }
 
@@ -213,7 +227,7 @@ int create(char parent_path[],char file_name[],char infile[])
     }
     if(extension==NULL)
     {
-   //     puts("addfile_FAILURE <FILENAME_WITHOUT_EXTENSION>");
+   //     printf("\naddfile_FAILURE FILENAME_WITHOUT_EXTENSION");
      //   return 0;        
        strcpy(extension,"file");
     }
@@ -274,14 +288,14 @@ int create(char parent_path[],char file_name[],char infile[])
         new_node->fd_loc = METADATA.File_descriptor_array + i * sizeof(file_desp);
                         
         add_node_to_nary(parent,new_node);
-       // puts("display:");
+       // printf("\ndisplay:");
        // display_nary(NARY_ROOT);    
-         //       puts("...done:");
+         //       printf("\n...done:");
 
         ///////////Update BST////////////////////////////////////
 
 	    struct bst  *b = (struct bst*)malloc (sizeof(struct bst));
-	    if(b==NULL){puts("addfile_FAILURE <Space not avaliable for creating bst>");}
+	    if(b==NULL){printf("\naddfile_FAILURE Space not avaliable for creating bst");}
 	    else
 	    {    
 	        //b->FD=temp;  
@@ -319,12 +333,12 @@ int create(char parent_path[],char file_name[],char infile[])
 		    {
 
  			 //fwrite(filedata,1,index,ooo);
- 			   // puts("calling add data");
+ 			   // printf("\ncalling add data");
 			   // putchar(ch);
 			   // printf("\npaasing = %ld",file_desp.location_block_number);
 			    new_node->file_desp.location_block_number=add_data_blocks(filedata, new_node->file_desp.location_block_number);
 			   // printf("\nreturn = %ld",file_desp.location_block_number);
-			   // puts("\nblocks added");	
+			   // printf("\n\nblocks added");	
 			    index=0;
 		    }		                             
         }
@@ -333,12 +347,12 @@ int create(char parent_path[],char file_name[],char infile[])
         {
        
           //  fwrite(filedata,1,index,ooo);
- 			   // puts("calling add data");
+ 			   // printf("\ncalling add data");
 			   // putchar(ch);
 			   // printf("\npaasing = %ld",file_desp.location_block_number);
 			    new_node->file_desp.location_block_number=add_data_blocks(filedata, new_node->file_desp.location_block_number);
 			   // printf("\nreturn = %ld",file_desp.location_block_number);
-			   // puts("\nblocks added");	
+			   // printf("\n\nblocks added");	
 			    index=0;
         }
        // fclose(ooo);
@@ -349,12 +363,12 @@ int create(char parent_path[],char file_name[],char infile[])
 	}
 	else
 	{
-	    	printf("\naddfile_FAILURE <Error in creating File Descriptor for New file>");
+	    	printf("\naddfile_FAILURE Error in creating File Descriptor for New file");
 	    	return 0;
 	}
 		
 		
-	//puts("\n=========================\nreturn from createe");	
+	//printf("\n\n=========================\nreturn from createe");	
 	return 1;
 
 
@@ -370,7 +384,7 @@ int list_file(char file_path[],char outputfile[])
      struct bst *bstnode = (struct bst*)search_bst_path(BST_FULL_PATH,file_path);
      if(bstnode==NULL)
      {
-        //puts("listfile_FAILURE <SOURCE_FILE_PATH_NOT_FOUND>");
+        //printf("\nlistfile_FAILURE SOURCE_FILE_PATH_NOT_FOUND");
        	printf("\nlistfile_FAILURE %s",ERR_VFS_LISTFILE_01);
 
         return 0;
@@ -383,7 +397,7 @@ int list_file(char file_path[],char outputfile[])
 	
 	if(strcmp(file_desp.file_type,"txt")!=0)
 	{
-//	    puts("listfile_FAILURE <NOT_A_TEXT_FILE>");
+//	    printf("\nlistfile_FAILURE NOT_A_TEXT_FILE");
      	printf("\nlistfile_FAILURE %s",ERR_VFS_LISTFILE_02);
 	    return 0;
 	}
@@ -391,13 +405,13 @@ int list_file(char file_path[],char outputfile[])
 	long int loc=file_desp.location_block_number; //starting data block location
 	if(loc==-1) 
 	{
-	    puts("listfile_FAILURE <FILE_EMPTY>");
+	    printf("\nlistfile_FAILURE FILE_EMPTY");
 	    return 0;
 	}
     FILE *fout = fopen(outputfile,"wb+");
     if(fout==NULL)
     {
-//        puts("listfile_FAILURE <OUTPUT_FILE_PATH_NOT_FOUND>");
+//        printf("\nlistfile_FAILURE OUTPUT_FILE_PATH_NOT_FOUND");
      	printf("\nlistfile_FAILURE %s",ERR_VFS_LISTFILE_03);
 
         return 0;
@@ -439,12 +453,12 @@ int rm(char path[])
 {
     if(strcmp(path,"/")==0)
     {
-        puts("removefile_FAILURE <Access Denied>");
+        printf("\nremovefile_FAILURE Access Denied");
         return 0;
     }
     if(strcmp(path,"/")==0)
     {
-        puts("removefile_FAILURE <Access Denied>");
+        printf("\nremovefile_FAILURE Access Denied");
         return 0;
     }
     
@@ -454,7 +468,7 @@ int rm(char path[])
      struct bst *bstnode = (struct bst*)search_bst_path(BST_FULL_PATH,path);
      if(bstnode==NULL)
      {
- //       puts("removefile_FAILURE <CANNOT_FIND_SPECIFIED_PATH_OR_FILE>");
+ //       printf("\nremovefile_FAILURE CANNOT_FIND_SPECIFIED_PATH_OR_FILE");
       	printf("\nremovefile_FAILURE %s",ERR_VFS_REMOVEFILE_01);
 
         return 0;
@@ -466,7 +480,7 @@ int rm(char path[])
 
      if(strcmp(bstnode->nary_node->file_desp.file_type,"dir")==0)
      {
-        puts("removefile_FAILURE <NOT_A_FILE>");
+        printf("\nremovefile_FAILURE NOT_A_FILE");
        return 0;
      }
       //if node n to be deleted is first child
@@ -521,7 +535,7 @@ int rm(char path[])
 	loc=fd.location_block_number; //starting data block location
 	if(loc==-1) 
 	{
-	//puts("File Empty");
+	//printf("\nFile Empty");
 	}
 	while(loc!=-1)
 	{	
@@ -549,14 +563,14 @@ int find_file(char name[], char output_file[])
     }    
     if(fout==NULL)
     {
-        puts("searchfile_FAILURE <CANNOT_FIND/CREATE_SPECIFIED_OUTPUTFILE>");
+        printf("\nsearchfile_FAILURE CANNOT_FIND/CREATE_SPECIFIED_OUTPUTFILE");
         return 0;
     }
     fprintf(fout,"\n\n#Searching file with name %s :\n",name);
     find_in_hashtable(name,fout);
     fprintf(fout,"\n..Searching done.\n");
     fclose(fout);
-    //puts("File found");
+    //printf("\nFile found");
     return 1;
 }
 /*
@@ -565,7 +579,7 @@ Rename <source_file_path> to
 */
 int mv(char src_file_path[],char dest_dir_path[])
 {
- 	//puts("In movedir");
+ 	//printf("\nIn movedir");
     //find src-dir...
     //remove it....and add to dest-dir
     //delete from N-ARy & BST & Hash TABLE
@@ -573,7 +587,7 @@ int mv(char src_file_path[],char dest_dir_path[])
      struct bst *bstnode_src = (struct bst*)search_bst_path(BST_FULL_PATH,src_file_path);
      if(bstnode_src==NULL)
      {
-//        puts("movefile_FAILURE <CANNOT_FIND_SOURCEFILE>");
+//        printf("\nmovefile_FAILURE CANNOT_FIND_SOURCEFILE");
      	printf("\nmovefile_FAILURE %s",ERR_VFS_MOVEFILE_01);
 
         return 0;
@@ -588,7 +602,7 @@ int mv(char src_file_path[],char dest_dir_path[])
 	i = separate_path(dir_struct,dest_dir_path,&total_dir_in_path);
 	if(i==0)
 	{ 
-   	     puts("movefile_FAILURE <UNABLE_TO_PROCESS_PATH>");
+   	     printf("\nmovefile_FAILURE UNABLE_TO_PROCESS_PATH");
 	     return 0;
 	}
 	else //form a new path
@@ -607,7 +621,7 @@ int mv(char src_file_path[],char dest_dir_path[])
      struct bst *bstnode_dest = (struct bst*)search_bst_path(BST_FULL_PATH,dest_dir_path);
      if(bstnode_dest!=NULL)
      {
-        puts("movefile_FAILURE <FILE_ALREADY_EXISTS>");
+        printf("\nmovefile_FAILURE FILE_ALREADY_EXISTS");
         return 0;
      }
  
@@ -615,7 +629,7 @@ int mv(char src_file_path[],char dest_dir_path[])
      bstnode_dest = (struct bst*)search_bst_path(BST_FULL_PATH,new_dest_dir_path);
      if(bstnode_dest==NULL)
      {
-//        puts("movefile_FAILURE <CANNOT_FIND_DESTINATION_PATH>");
+//        printf("\nmovefile_FAILURE CANNOT_FIND_DESTINATION_PATH");
      	printf("\nmovefile_FAILURE %s",ERR_VFS_MOVEFILE_02);
 
         return 0;
@@ -624,14 +638,14 @@ int mv(char src_file_path[],char dest_dir_path[])
      
      if(strcmp(bstnode_src->nary_node->file_desp.file_type,"dir")==0)
      {
-        puts("movefile_FAILURE <NOT_A_FILE>");
+        printf("\nmovefile_FAILURE NOT_A_FILE");
         return 0;
      }
 
 
      if(strcmp(bstnode_dest->nary_node->file_desp.file_type,"dir")!=0)
      {
-        puts("movefile_FAILURE <DESTINATION_CANNOT_BE_FILE>");
+        printf("\nmovefile_FAILURE DESTINATION_CANNOT_BE_FILE");
         return 0;
      }
 
@@ -666,7 +680,7 @@ return status;
      //if node n to be moved is first child
    if(parent_nary->child==bstnode_src->nary_node)
      {
-        //puts("first child");
+        //printf("\nfirst child");
         parent_nary->child=bstnode_src->nary_node->sibling;
         //printf("new chlid Path %s",parent_nary->child->file_desp.file_location_full_path);
         //Update FD
@@ -737,7 +751,7 @@ int copy_file(char src[],char dest[])
     //check for space
 	if(METADATA.no_of_file_desp_used>=METADATA.max_no_of_file_desp_available-1)
 	{
-//		puts("\ncopyfile_FAILURE <FILE_SYSTEM_FULL>");
+//		printf("\n\ncopyfile_FAILURE FILE_SYSTEM_FULL");
      	printf("\ncopyfile_FAILURE %s",ERR_VFS_COPYFILE_04);
 		return 0; 
 	}
@@ -745,7 +759,7 @@ int copy_file(char src[],char dest[])
      struct bst *src_bstnode = (struct bst*)search_bst_path(BST_FULL_PATH,src);
      if(src_bstnode==NULL)
      {
-//        puts("copyfile_FAILURE <CANNOT_FIND_SPECIFIED_SOURCEFILE>");
+//        printf("\ncopyfile_FAILURE CANNOT_FIND_SPECIFIED_SOURCEFILE");
      	printf("\ncopyfile_FAILURE %s",ERR_VFS_COPYFILE_01);
         return 0;
      }
@@ -761,7 +775,7 @@ int copy_file(char src[],char dest[])
 	i = separate_path(dir_struct,dest,&total_dir_in_path);
 	if(i==0)
 	{ 
-   	     puts("copyfile_FAILURE <UNABLE_TO_PROCESS_PATH>");
+   	     printf("\ncopyfile_FAILURE UNABLE_TO_PROCESS_PATH");
 	     return 0;
 	}
 	else //form a new path
@@ -781,7 +795,7 @@ int copy_file(char src[],char dest[])
      struct bst *bstnode_dest = (struct bst*)search_bst_path(BST_FULL_PATH,dest);
      if(bstnode_dest!=NULL)
      {
-        puts("copyfile_FAILURE <FILE_ALREADY_EXISTS>");
+        printf("\ncopyfile_FAILURE FILE_ALREADY_EXISTS");
      //	printf("\ncopyfile_FAILURE %s",ERR_VFS_COPYFILE_05);
         return 0;
      }
@@ -794,7 +808,7 @@ int copy_file(char src[],char dest[])
      struct bst *dest_bstnode = (struct bst*)search_bst_path(BST_FULL_PATH,new_dest_dir_path);
      if(dest_bstnode==NULL)
      {
-//        puts("copyfile_FAILURE <CANNOT_FIND_DESTINATIONPATH>");
+//        printf("\ncopyfile_FAILURE CANNOT_FIND_DESTINATIONPATH");
      	printf("\ncopyfile_FAILURE %s",ERR_VFS_COPYFILE_02);
 
         return 0;
@@ -806,14 +820,14 @@ int copy_file(char src[],char dest[])
      //src must be file and dest must be dir
 	if(strcmp(new_file_desp.file_type,"dir")==0)
 	{
-//	    puts("copyfile_FAILURE <NOT_A_FILE>");
+//	    printf("\ncopyfile_FAILURE NOT_A_FILE");
 
      	printf("\ncopyfile_FAILURE %s",ERR_VFS_COPYFILE_03);
 	    return 0;
 	}
   	if(strcmp(dest_bstnode->nary_node->file_desp.file_type,"dir")!=0)
 	{
-//	    puts("copyfile_FAILURE <CANNOT_COPY_DIR_TO_FILE>");
+//	    printf("\ncopyfile_FAILURE CANNOT_COPY_DIR_TO_FILE");
      	printf("\ncopyfile_FAILURE %s",ERR_VFS_COPYFILE_03);
 	    return 0;
 	}
@@ -837,7 +851,7 @@ int copy_file(char src[],char dest[])
 
     if(new_bstnode!=NULL)
     {
-        puts("copyfile_FAILURE <FILE_WITH_SAME_NAME_EXISTS>");
+        printf("\ncopyfile_FAILURE FILE_WITH_SAME_NAME_EXISTS");
         return 0;
     }
        
@@ -850,7 +864,7 @@ int copy_file(char src[],char dest[])
 	long int blocks_req = src_file_desp.file_size / sizeof(blockdata.data);
     if(blocks_req >= (METADATA.no_of_blocks - METADATA.no_of_blocks_used))
     {
-//        puts("copyfile_FAILURE <FILE_SYSTEM_FULL>");
+//        printf("\ncopyfile_FAILURE FILE_SYSTEM_FULL");
      	printf("\ncopyfile_FAILURE %s",ERR_VFS_COPYFILE_04);
         return 0;
     }
@@ -907,14 +921,14 @@ int copy_file(char src[],char dest[])
         new_node->fd_loc = METADATA.File_descriptor_array + i * sizeof(new_file_desp);
                         
         add_node_to_nary(parent,new_node);
-       // puts("display:");
+       // printf("\ndisplay:");
        // display_nary(NARY_ROOT);    
-         //       puts("...done:");
+         //       printf("\n...done:");
 
         ///////////Update BST////////////////////////////////////
 
 	    struct bst  *b = (struct bst*)malloc (sizeof(struct bst));
-	    if(b==NULL){puts("Space not avaliable for creating bst");}
+	    if(b==NULL){printf("\nSpace not avaliable for creating bst");}
 	    else
 	    {    
 	        //b->FD=temp;  
@@ -951,7 +965,7 @@ int copy_file(char src[],char dest[])
 	}
 	else
 	{
-    	printf("\ncopyfile_FAILURE <Error_in_creating_File_Descriptor_for_New_directory>");
+    	printf("\ncopyfile_FAILURE Error_in_creating_File_Descriptor_for_New_directory");
 	    	return 0;
 	}
 		
@@ -970,7 +984,7 @@ int export_file(char file_path[],char outputfile[])
      struct bst *bstnode = (struct bst*)search_bst_path(BST_FULL_PATH,file_path);
      if(bstnode==NULL)
      {
-//        puts("exportfile_FAILURE <CANNOT_FIND_SPECIFIED_SOURCEFILE>");
+//        printf("\nexportfile_FAILURE CANNOT_FIND_SPECIFIED_SOURCEFILE");
      	printf("\nexportfile_FAILURE %s",ERR_VFS_EXPORTFILE_01);
         return 0;
      }
@@ -978,7 +992,7 @@ int export_file(char file_path[],char outputfile[])
     FILE *fout = fopen(outputfile,"wb+");
     if(fout==NULL)
     {
-//        puts("exportfile_FAILURE <CANNOT_FIND/CREATE_SPECIFIED_OUTPUTFILE>");
+//        printf("\nexportfile_FAILURE CANNOT_FIND/CREATE_SPECIFIED_OUTPUTFILE");
      	printf("\nexportfile_FAILURE %s",ERR_VFS_EXPORTFILE_02);
         return 0;
     }
@@ -989,7 +1003,7 @@ int export_file(char file_path[],char outputfile[])
 	
 	if(strcmp(file_desp.file_type,"dir")==0)
 	{
-//	    puts("exportfile_FAILURE <CANNOT_EXPORT_DIR>");
+//	    printf("\nexportfile_FAILURE CANNOT_EXPORT_DIR");
      	printf("\nexportfile_FAILURE %s",ERR_VFS_EXPORTFILE_03);
 
 	    return 0;
@@ -998,7 +1012,7 @@ int export_file(char file_path[],char outputfile[])
 	long int loc=file_desp.location_block_number; //starting data block location
 	if(loc==-1) 
 	{
-	    puts("exportfile_FAILURE <File_Empty>");
+	    printf("\nexportfile_FAILURE File_Empty");
 	    return 0;
 	}
 	long int index=0;
@@ -1050,14 +1064,14 @@ with <data> according to <flag>.
 int update_file(char path[],char fin[])
 {
      //check file exists or not
-    //puts("in update\n\n");
+    //printf("\nin update\n\n");
     //return 1; 
      //puts(path);
      //puts(fin);
      struct bst *bstnode = (struct bst*)search_bst_path(BST_FULL_PATH,path);
      if(bstnode==NULL)
      {
-//        puts("updatefile_FAILURE <INTERNAL_FILE_PATH_NOT_FOUND>");
+//        printf("\nupdatefile_FAILURE INTERNAL_FILE_PATH_NOT_FOUND");
      	printf("\nupdatefile_FAILURE %s",ERR_VFS_UPDATEFILE_01);
 
         return 0;
@@ -1066,7 +1080,7 @@ int update_file(char path[],char fin[])
      FILE *fp = fopen(fin,"rb");    
      if(fp==NULL)
      {
-//        puts("updatefile_FAILURE <EXTERNAL_FILE_PATH_NOT_FOUND>");
+//        printf("\nupdatefile_FAILURE EXTERNAL_FILE_PATH_NOT_FOUND");
      	printf("\nupdatefile_FAILURE %s",ERR_VFS_UPDATEFILE_02);
         return 0; 
      }
@@ -1078,17 +1092,25 @@ int update_file(char path[],char fin[])
      //delete old file.........
      if( rm(path) == 0)
      {
-        puts("updatefile_FAILURE <UNABLE_DELETE_OLD_DATA>");
+        printf("\nupdatefile_FAILURE UNABLE_DELETE_OLD_DATA");
         return 0; 
      }
      
      //add new file.........
      if( create(parent_path,file_desp.file_name,fin)==0)   
      {
-        puts("updatefile_FAILURE <UNABLE_TO_OVERWRITE>");
+        printf("\nupdatefile_FAILURE UNABLE_TO_OVERWRITE");
         return 0; 
      }
-     
+     ///////////check isdir for input file path
+	DIR *din = opendir(fin);
+	if(din!=NULL)
+	{
+	    printf("\nupdate_FAILURE NOT_A_FILE");
+	    close(din);
+	    return 0;
+	}
+
      return 1;
         
 }

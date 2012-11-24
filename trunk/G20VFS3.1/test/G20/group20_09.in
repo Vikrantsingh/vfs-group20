@@ -7,10 +7,10 @@ makedir /aaaa/bbbb/cccc/dddd/eeee/ffff/gggg/hhhh iiii
 movedir /aaaa /a
 movedir /aa /a
 movedir /a /aaa
-listdir / 1 outputdir
+listdir / 1 /tmp/outputdir
 unmountvfs demo9
 mountvfs demo9
-listdir / 1 outputdir
+listdir / 1 /tmp/outputdir
 movedir /aaa/a /
 movedir /a/aa /
 movedir /a/aaaa /
@@ -34,10 +34,10 @@ makedir /aaaa/bbbb/cccc/dddd/eeee/ffff/gggg/hhhh iiii
 movedir /aaaa /a
 movedir /aa /a
 movedir /a /aaa
-listdir / 1 outputdir
+listdir / 1 /tmp/outputdir
 unmountvfs demo9
 mountvfs demo9
-listdir / 1 outputdir
+listdir / 1 /tmp/outputdir
 movedir /aaa/a /
 movedir /a/aa /
 movedir /a/aaaa /

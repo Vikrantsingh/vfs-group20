@@ -14,9 +14,6 @@ file_operators.o:src/file_operators.c
 directory_operators.o:src/directory_operators.c
 	gcc -c src/directory_operators.c -o bin/directory_operators.o
 
-#ui.o: src/ui.c
-#	gcc -c src/ui.c -o bin/ui.o
-
 
 hashtable.o: src/hashtable.c
 	gcc -c src/hashtable.c -o bin/hashtable.o
