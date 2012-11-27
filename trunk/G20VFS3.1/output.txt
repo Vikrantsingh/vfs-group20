@@ -1,5 +1,0 @@
-
-
-#Searching file with name file0 :
-
-..Searching done.
