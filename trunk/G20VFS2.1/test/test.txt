@@ -1,8 +1,0 @@
-create_vfs demo01
-mount_vfs demo01
-makedir ROOT home
-makedir ROOT/home demo
-create ROOT/home/demo hello.txt
-listfile ROOT/home/demo hello.txt
-unmount_vfs demo01
-
