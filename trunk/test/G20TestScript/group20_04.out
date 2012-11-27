@@ -1,0 +1,76 @@
+createvfs_SUCCESS
+mountvfs_SUCCESS
+makedir_SUCCESS
+makedir_SUCCESS
+makedir_SUCCESS
+listdir_SUCCESS
+movedir_SUCCESS
+makedir_FAILURE DIRECTORY_ALREADY_EXISTS
+listdir_SUCCESS
+deletedir_SUCCESS
+listdir_SUCCESS
+makedir_SUCCESS
+addfile_SUCCESS
+searchfile_SUCCESS
+listdir_SUCCESS
+copyfile_SUCCESS
+listdir_SUCCESS
+listfile_SUCCESS
+unmountvfs_SUCCESS
+createvfs_FAILURE DATA_FILE_ALREADY_EXISTS
+mountvfs_SUCCESS
+searchfile_SUCCESS
+removefile_SUCCESS
+listdir_SUCCESS
+listfile_SUCCESS
+updatefile_SUCCESS
+listfile_SUCCESS
+removefile_SUCCESS
+searchfile_SUCCESS
+makedir_SUCCESS
+makedir_SUCCESS
+listdir_SUCCESS
+deletedir_FAILURE DIRECTORY_IS_NOT_EMPTY
+listdir_SUCCESS
+movedir_SUCCESS
+deletedir_SUCCESS
+listdir_SUCCESS
+unmountvfs_SUCCESS
+createvfs_FAILURE DATA_FILE_ALREADY_EXISTS
+mountvfs_SUCCESS
+makedir_FAILURE DIRECTORY_ALREADY_EXISTS
+makedir_FAILURE DIRECTORY_ALREADY_EXISTS
+makedir_SUCCESS
+listdir_SUCCESS
+movedir_SUCCESS
+makedir_FAILURE DIRECTORY_ALREADY_EXISTS
+listdir_SUCCESS
+deletedir_SUCCESS
+listdir_SUCCESS
+makedir_FAILURE DIRECTORY_ALREADY_EXISTS
+addfile_SUCCESS
+searchfile_SUCCESS
+listdir_SUCCESS
+copyfile_SUCCESS
+listdir_SUCCESS
+listfile_SUCCESS
+unmountvfs_SUCCESS
+createvfs_FAILURE DATA_FILE_ALREADY_EXISTS
+mountvfs_SUCCESS
+searchfile_SUCCESS
+removefile_SUCCESS
+listdir_SUCCESS
+listfile_SUCCESS
+updatefile_SUCCESS
+listfile_SUCCESS
+removefile_SUCCESS
+searchfile_SUCCESS
+makedir_SUCCESS
+makedir_SUCCESS
+listdir_SUCCESS
+deletedir_FAILURE DIRECTORY_IS_NOT_EMPTY
+listdir_SUCCESS
+movedir_FAILURE DESTINATION_ALREADY_HAVE_SOURCE_DIR
+deletedir_FAILURE DIRECTORY_IS_NOT_EMPTY
+listdir_SUCCESS
+unmountvfs_SUCCESS

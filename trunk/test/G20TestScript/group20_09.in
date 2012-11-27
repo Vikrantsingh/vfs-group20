@@ -1,0 +1,55 @@
+createvfs demo9 500
+mountvfs demo9
+makedir /a/b/c/d/e/f/g/h i
+makedir /aa/bb/cc/dd/ee/ff/gg/hh ii
+makedir /aaa/bbb/ccc/ddd/eee/fff/ggg/hhh/ iii
+makedir /aaaa/bbbb/cccc/dddd/eeee/ffff/gggg/hhhh iiii
+movedir /aaaa /a
+movedir /aa /a
+movedir /a /aaa
+listdir / 1 /tmp/outputdir
+unmountvfs demo9
+mountvfs demo9
+listdir / 1 /tmp/outputdir
+movedir /aaa/a /
+movedir /a/aa /
+movedir /a/aaaa /
+unmountvfs demo9
+mountvfs demo9
+deletedir /aaaa/bbbb/cccc/dddd/eeee/ffff/gggg/hhhh/iiii
+deletedir /aaaa/bbbb/cccc/dddd/eeee/ffff/gggg/hhhh
+deletedir /aaaa/bbbb/cccc/dddd/eeee/ffff/gggg
+deletedir /aaaa/bbbb/cccc/dddd/eeee/ffff/
+deletedir /aaaa/bbbb/cccc/dddd/eeee/
+deletedir /aaaa/bbbb/cccc/dddd/
+deletedir /aaaa/bbbb/cccc/
+deletedir /aaaa/bbbb/
+deletedir /aaaa/
+unmountvfs
+mountvfs demo9
+makedir /a/b/c/d/e/f/g/h i
+makedir /aa/bb/cc/dd/ee/ff/gg/hh ii
+makedir /aaa/bbb/ccc/ddd/eee/fff/ggg/hhh/ iii
+makedir /aaaa/bbbb/cccc/dddd/eeee/ffff/gggg/hhhh iiii
+movedir /aaaa /a
+movedir /aa /a
+movedir /a /aaa
+listdir / 1 /tmp/outputdir
+unmountvfs demo9
+mountvfs demo9
+listdir / 1 /tmp/outputdir
+movedir /aaa/a /
+movedir /a/aa /
+movedir /a/aaaa /
+unmountvfs demo9
+mountvfs demo9
+deletedir /aaaa/bbbb/cccc/dddd/eeee/ffff/gggg/hhhh/iiii
+deletedir /aaaa/bbbb/cccc/dddd/eeee/ffff/gggg/hhhh
+deletedir /aaaa/bbbb/cccc/dddd/eeee/ffff/gggg
+deletedir /aaaa/bbbb/cccc/dddd/eeee/ffff/
+deletedir /aaaa/bbbb/cccc/dddd/eeee/
+deletedir /aaaa/bbbb/cccc/dddd/
+deletedir /aaaa/bbbb/cccc/
+deletedir /aaaa/bbbb/
+deletedir /aaaa/
+unmountvfs demo9
