@@ -15,7 +15,7 @@ searchfile demo.txt /tmp/outputdir
 listdir /home 1 /tmp/outputdir
 copyfile /home/sub1/demo.txt /home/demo.txt
 listdir /home 1 /tmp/outputdir
-listfile /home/demo.txt viki.txt
+listfile /home/demo.txt vi.txt
 unmountvfs demo4
 createvfs demo4 100
 mountvfs demo4 
@@ -53,7 +53,7 @@ searchfile demo.txt /tmp/outputdir
 listdir /home 1 /tmp/outputdir
 copyfile /home/sub1/demo.txt /home/demo.txt
 listdir /home 1 /tmp/outputdir
-listfile /home/demo.txt viki.txt
+listfile /home/demo.txt vi.txt
 unmountvfs demo4
 createvfs demo4 100
 mountvfs demo4 
