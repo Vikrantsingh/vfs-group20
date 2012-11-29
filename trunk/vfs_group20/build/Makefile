@@ -1,5 +1,5 @@
-vfs_group20.exe: freelist.o file_system.o file_operators.o directory_operators.o  hashtable.o bst_hash_chain.o bst_full_path.o nary.o validation.o string_operations.o vfsdriver.o
-	gcc ../bin/freelist.o ../bin/file_system.o ../bin/file_operators.o ../bin/directory_operators.o  ../bin/hashtable.o ../bin/bst_hash_chain.o ../bin/bst_full_path.o ../bin/nary.o   ../bin/validation.o ../bin/string_operations.o ../bin/vfsdriver.o -o ../bin/vfs_group20.exe
+vfs_group20: freelist.o file_system.o file_operators.o directory_operators.o  hashtable.o bst_hash_chain.o bst_full_path.o nary.o validation.o string_operations.o vfsdriver.o
+	gcc ../bin/freelist.o ../bin/file_system.o ../bin/file_operators.o ../bin/directory_operators.o  ../bin/hashtable.o ../bin/bst_hash_chain.o ../bin/bst_full_path.o ../bin/nary.o   ../bin/validation.o ../bin/string_operations.o ../bin/vfsdriver.o -o ../bin/vfs_group20
 
 freelist.o:../src/freelist.c 
 	gcc -c ../src/freelist.c -o ../bin/freelist.o
