@@ -1,0 +1,55 @@
+createvfs_SUCCESS
+mountvfs_SUCCESS
+makedir_SUCCESS
+makedir_SUCCESS
+makedir_SUCCESS
+makedir_SUCCESS
+movedir_SUCCESS
+movedir_SUCCESS
+movedir_SUCCESS
+listdir_SUCCESS
+unmountvfs_SUCCESS
+mountvfs_SUCCESS
+listdir_SUCCESS
+movedir_SUCCESS
+movedir_SUCCESS
+movedir_SUCCESS
+unmountvfs_SUCCESS
+mountvfs_SUCCESS
+deletedir_SUCCESS
+deletedir_SUCCESS
+deletedir_SUCCESS
+deletedir_SUCCESS
+deletedir_SUCCESS
+deletedir_SUCCESS
+deletedir_SUCCESS
+deletedir_SUCCESS
+deletedir_SUCCESS
+unmountvfs_FAILURE  VFS_INSUFFICIENT_ARGUMENTS 
+mountvfs_FAILURE   VFS_ALREADY_MOUNTED 
+makedir_FAILURE  DIRECTORY_ALREADY_EXISTS 
+makedir_FAILURE  DIRECTORY_ALREADY_EXISTS 
+makedir_FAILURE  DIRECTORY_ALREADY_EXISTS 
+makedir_SUCCESS
+movedir_SUCCESS
+movedir_SUCCESS
+movedir_SUCCESS
+listdir_SUCCESS
+unmountvfs_SUCCESS
+mountvfs_SUCCESS
+listdir_SUCCESS
+movedir_SUCCESS
+movedir_SUCCESS
+movedir_SUCCESS
+unmountvfs_SUCCESS
+mountvfs_SUCCESS
+deletedir_SUCCESS
+deletedir_SUCCESS
+deletedir_SUCCESS
+deletedir_SUCCESS
+deletedir_SUCCESS
+deletedir_SUCCESS
+deletedir_SUCCESS
+deletedir_SUCCESS
+deletedir_SUCCESS
+unmountvfs_SUCCESS
