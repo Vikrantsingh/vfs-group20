@@ -11,7 +11,7 @@
 		~vfs_group20# cd build
 		~vfs_group20/buid# make
 		~vfs_group20/buid#cd ..
-		~vfs_group20#./bin/vfs_group20.exe demo_interaction_input.txt
+		~vfs_group20#./bin/vfs_group20 demo_interaction_input.txt
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

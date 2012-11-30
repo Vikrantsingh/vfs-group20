@@ -14,19 +14,26 @@
 
 long int  get_new_node()
 {
+    FILE *fp = VFS_MOUNT_POINT;
 	if(METADATA.freelist==-1)
 		{
 			puts("\nNo Free node Available"); 
 			return 0;
 		}
 	long int location = METADATA.freelist;
-	fseek(VFS_MOUNT_POINT,METADATA.freelist,SEEK_SET);	
+	fseek(fp,METADATA.freelist,SEEK_SET);	
 	struct block b;
 	if(fread(&b,sizeof(b),1,VFS_MOUNT_POINT)==1)
 	{}
 	//printf("\nFree list old=%ld and new = %ld",METADATA.freelist,b.next);
 	METADATA.freelist = b.next;
 	++METADATA.no_of_blocks_used;
+/////////////////////////////
+	rewind(fp);
+	if(fwrite(&METADATA,sizeof(METADATA),1,VFS_MOUNT_POINT)==1)
+	{}
+
+
 	return location;
 
 }
@@ -38,7 +45,7 @@ long int  get_new_node()
 
 int delete_node(long int location)
 {
-	
+    FILE *fp = VFS_MOUNT_POINT;
 	if(location==-1)
 		{
 			puts("\nAlready Empty"); 
@@ -51,11 +58,17 @@ int delete_node(long int location)
 	b.next=METADATA.freelist;
 	b.isfull = '0';
 	strcpy(b.data,"");
-	fseek(VFS_MOUNT_POINT,location,SEEK_SET);//-1
+	fseek(fp,location,SEEK_SET);//-1
 	if(fwrite(&b,sizeof(b),1,VFS_MOUNT_POINT)==1)
 	{}
 	METADATA.freelist = location;
 	--METADATA.no_of_blocks_used;
+	/////////////////////////////////
+	rewind(fp);
+	if(fwrite(&METADATA,sizeof(METADATA),1,VFS_MOUNT_POINT)==1)
+	{}
+	
+	
 	return 1;
 }
 
