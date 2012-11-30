@@ -1,0 +1,19 @@
+createvfs demo3 1000
+mountvfs demo3
+mountvfs demo4
+unmountvfs demo5
+unmountvfs demo3
+mountvfs demo3
+deletedir /home/a/b/c/d/e
+makedir /a123$#^%/AKDGF2345/J2H3G4K @#$
+makedir /a123$#^%/AKDGF2345/J2H3G4K @%%//#$
+movedir /a123$#^%/AKDGF2345/J2H3G4K/@#$ /a/b
+makedir /a123$#^%/AKDGF2345/J2H3G4K/@#$/home/a/b c
+listdir / 0 /tmp/outputdir
+addfile /a123$#^% demo.png /usr/demo.png
+unmountvfs demo3
+mountvfs demo3
+listfile /a123$#^%/demo.png
+movefile /a123$#^%/demo.png /demo.png
+exportfile /demo.png /tmp/demo.png
+unmountvfs demo3
