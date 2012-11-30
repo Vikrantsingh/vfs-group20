@@ -1,0 +1,76 @@
+createvfs demo4 500
+mountvfs demo4 
+makedir /home d
+makedir /home a
+makedir /home/d demo
+listdir /home 1 /tmp/outputdir 
+movedir /home/d/demo /home/a
+makedir /home/a demo
+listdir /home 1 /tmp/outputdir 
+deletedir /home/a/demo
+listdir /home 1 /tmp/outputdir 
+makedir /home/sub1 sub2
+addfile /home/sub1 demo.txt /usr/include/stdio.h
+searchfile demo.txt /tmp/outputdir
+listdir /home 1 /tmp/outputdir
+copyfile /home/sub1/demo.txt /home/demo.txt
+listdir /home 1 /tmp/outputdir
+listfile /home/demo.txt viki.txt
+unmountvfs demo4
+createvfs demo4 100
+mountvfs demo4 
+searchfile demo.txt /tmp/outputdir
+removefile /home/sub1/demo.txt
+listdir /home 1 /tmp/outputdir
+listfile /home/demo.txt fout
+updatefile /home/demo.txt /usr/include/memory.h
+listfile /home/demo.txt fout2
+removefile /home/demo.txt
+searchfile demo /tmp/outputdir
+makedir /a/b/c/d/e ab
+makedir /a/b/c f
+listdir / 1 /tmp/outputdir
+deletedir /a/b/c/d
+listdir / 1 /tmp/outputdir
+movedir /a/b /
+deletedir /a
+listdir / 1 /tmp/outputdir
+unmountvfs demo4 
+createvfs demo4 500
+mountvfs demo4 
+makedir /home d
+makedir /home a
+makedir /home/d demo
+listdir /home 1 /tmp/outputdir 
+movedir /home/d/demo /home/a
+makedir /home/a demo
+listdir /home 1 /tmp/outputdir 
+deletedir /home/a/demo
+listdir /home 1 /tmp/outputdir 
+makedir /home/sub1 sub2
+addfile /home/sub1 demo.txt /usr/include/stdio.h
+searchfile demo.txt /tmp/outputdir
+listdir /home 1 /tmp/outputdir
+copyfile /home/sub1/demo.txt /home/demo.txt
+listdir /home 1 /tmp/outputdir
+listfile /home/demo.txt viki.txt
+unmountvfs demo4
+createvfs demo4 100
+mountvfs demo4 
+searchfile demo.txt /tmp/outputdir
+removefile /home/sub1/demo.txt
+listdir /home 1 /tmp/outputdir
+listfile /home/demo.txt fout
+updatefile /home/demo.txt /usr/include/memory.h
+listfile /home/demo.txt fout2
+removefile /home/demo.txt
+searchfile demo /tmp/outputdir
+makedir /a/b/c/d/e ab
+makedir /a/b/c f
+listdir / 1 /tmp/outputdir
+deletedir /a/b/c/d
+listdir / 1 /tmp/outputdir
+movedir /a/b /
+deletedir /a
+listdir / 1 /tmp/outputdir
+unmountvfs demo4 

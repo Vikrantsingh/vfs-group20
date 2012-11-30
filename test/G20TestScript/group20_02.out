@@ -1,0 +1,25 @@
+createvfs_SUCCESS
+mountvfs_SUCCESS
+makedir_SUCCESS
+addfile_FAILURE PATH_NOT_FOUND
+addfile_SUCCESS
+listfile_FAILURE NOT_A_TEXT_FILE
+movefile_SUCCESS
+copyfile_SUCCESS
+listdir_SUCCESS
+removefile_SUCCESS
+unmountvfs_SUCCESS
+mountvfs_SUCCESS
+listdir_SUCCESS
+searchfile_SUCCESS
+listfile_FAILURE SOURCE_FILE_PATH_NOT_FOUND
+listfile_SUCCESS
+addfile_SUCCESS
+listfile_FAILURE NOT_A_TEXT_FILE
+exportfile_SUCCESS
+unmountvfs_SUCCESS
+mountvfs_FAILURE DATA_FILE_NOT_FOUND
+exportfile_FAILURE VFS_NOT_MOUNTED
+mountvfs_SUCCESS
+exportfile_FAILURE OUTPUT_FILE_ALREADY_EXISTS
+unmountvfs_SUCCESS
