@@ -69,7 +69,7 @@ int makedir_recursive(char parent_path[],char dir_name[])
 	i = separate_path(dir_struct,parent_path,&total_dir_in_path);
 	if(i==0)
 	{ 
-   	     puts("makedir_FAILURE UNABLE_TO_PROCESS_PATH\n");
+   	     puts("makedir_FAILURE UNABLE_TO_PROCESS_PATH");
 	     return 0;
 	}
 	//puts("i got");
@@ -201,7 +201,7 @@ int make_dir(char parent_path[],char dir_name[])
     //puts(parent_path);
     if(bstnode==NULL)
     {
-        puts("makedir_FAILURE PATH_NOT_FOUND\n");
+        puts("makedir_FAILURE PATH_NOT_FOUND");
         //puts(parent_path);
         return 0;
     }
