@@ -1,0 +1,25 @@
+createvfs demo2 1000
+mountvfs demo2
+makedir /home/abc xyz
+addfile /home/xyz demo.txt /usr/include/memory.h
+addfile /home/abc/xyz demo.txt /usr/include/memory.h
+listfile /home 1 /tmp/outputdir 
+movefile /home/abc/xyz/demo.txt /home/demo.txt
+copyfile /home/demo.txt /home/abc/demo.txt
+listdir /home 1 /tmp/outputdir 
+removefile /home/demo.txt
+unmountvfs demo2
+mountvfs demo2
+listdir /home 1 /tmp/outputdir 
+searchfile demo.txt /tmp/outputdir
+listfile /home/demo.txt /tmp/demo2op.txt
+listfile /home/abc/demo.txt /tmp/demo2op.txt
+addfile /home abc.h /usr/include/memory.h
+listfile /home/abc.h /tmp/abcop.h
+exportfile /home/abc.h /tmp/abcop.h
+unmountvfs demo2
+mountvfs demo12
+exportfile /home/abc.h /tmp/abcop.h
+mountvfs demo2
+exportfile /home/abc.h /tmp/abcop.h
+unmountvfs demo2
