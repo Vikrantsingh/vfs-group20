@@ -405,12 +405,12 @@ int validate_mkdir(char *path,char *name)
      }	 	 
 	if((strlen(path)+strlen(name)+5)>=MAX_LENGTH_OF_PATH)
 	{
-	  printf("makedir_FAILURE <PATH_TOO_LONG>\n");
+	  printf("makedir_FAILURE PATH_TOO_LONG\n");
 	  return 0;
 	}
 	if(strlen(name)>=MAX_LENGTH_OF_NAME)
 	{
-	  printf("makedir_FAILURE <NAME_TOO_LONG>\n");
+	  printf("makedir_FAILURE NAME_TOO_LONG\n");
 	  return 0;
 	}
 
