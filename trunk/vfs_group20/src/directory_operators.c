@@ -69,7 +69,7 @@ int makedir_recursive(char parent_path[],char dir_name[])
 	i = separate_path(dir_struct,parent_path,&total_dir_in_path);
 	if(i==0)
 	{ 
-   	     puts("makedir_FAILURE UNABLE_TO_PROCESS_PATH");
+   	     puts("makedir_FAILURE UNABLE_TO_PROCESS_PATH\n");
 	     return 0;
 	}
 	//puts("i got");
@@ -201,7 +201,7 @@ int make_dir(char parent_path[],char dir_name[])
     //puts(parent_path);
     if(bstnode==NULL)
     {
-        puts("makedir_FAILURE <PATH_NOT_FOUND>");
+        puts("makedir_FAILURE PATH_NOT_FOUND\n");
         //puts(parent_path);
         return 0;
     }
@@ -269,7 +269,7 @@ int make_dir(char parent_path[],char dir_name[])
         ///////////Update BST////////////////////////////////////
 
 	    struct bst  *b = (struct bst*)malloc (sizeof(struct bst));
-	    if(b==NULL){puts("makedir_FAILURE <Space not avaliable for creating bst>");}
+	    if(b==NULL){puts("makedir_FAILURE Space not avaliable for creating bst\n");}
 	    else
 	    {    
 	        //b->FD=temp;  
@@ -290,7 +290,7 @@ int make_dir(char parent_path[],char dir_name[])
 	}
 	else
 	{
-	    	printf("\nmakedir_FAILURE <Error in creating File Descriptor for New directory>");
+	    	printf("\nmakedir_FAILURE Error in creating File Descriptor for New directory\n");
 	    	return 0;
 	}
 		
@@ -310,12 +310,12 @@ int delete_dir(char path[])
 {
     if(strcmp(path,"/")==0)
     {
-        puts("deletedir_FAILURE <ACCESS_DENIED>");
+        puts("deletedir_FAILURE ACCESS_DENIED\n");
         return 0;
     }
     if(strcmp(path,"/")==0)
     {
-        puts("deletedir_FAILURE <ACCESS_DENIED>");
+        puts("deletedir_FAILURE ACCESS_DENIED\n");
         return 0;
     }
 	//puts("In deletedir");
@@ -339,7 +339,7 @@ int delete_dir(char path[])
      if(strcmp(bstnode->nary_node->file_desp.file_type,"dir")!=0)
      {
 //        puts("deletedir_FAILURE <INVALID_DIRNAME>");
-        puts("deletedir_FAILURE <NOT_A_DIR>");
+        puts("deletedir_FAILURE NOT_A_DIR\n");
         return 0;
      }
 
@@ -578,7 +578,7 @@ int move_dir(char src_dir_path[],char dest_dir_path[])
         */
         if(update_path_in_subtree(node->child)==0)
         {
-            puts("movedir_FAILURE <in movedir: err in deleting subtree>");
+            puts("movedir_FAILURE ERR_IN_DELETING_SUBTREE");
             return 0;
         }
         

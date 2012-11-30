@@ -205,7 +205,7 @@ int mount_vfs(char name[])
 	{
 	
 	 
-		if(METADATA.iSOPEN == 1)
+		/*if(METADATA.iSOPEN == 1)
 		{
 		        printf("mountvfs_FAILURE VFS_FILE_CORRUPT\n");		        
 		        fclose(fp);		        		
@@ -218,7 +218,7 @@ int mount_vfs(char name[])
 			rewind(fp);
 			fwrite(&METADATA,sizeof(METADATA),1,fp);					
 		}
-
+*/
 	}
 	else
 	{
