@@ -31,7 +31,7 @@ long int add_data_blocks(char data[],long int start)
 
 	if(location==-1)
 	{
-		printf("Free Space Not Available");
+		printf("addingdatablock_FAILURE Free Space Not Available\n");
 		return -1;
 		  
 		
@@ -87,7 +87,7 @@ struct block read_data_blocks(long int location)
 	struct block b;
 	if(location==-1)
 	{
-		printf("Data Block Empty");
+		printf("Data Block Empty\n");
 		return ;
 	}
 	else
@@ -112,7 +112,7 @@ int display_data_blocks(struct block b)
 
 	if(b.isfull=='0')
 	{
-		printf("Data Block Empty");
+		printf("Data Block Empty\n");
 		return -1;
 	}
 	else
@@ -183,7 +183,7 @@ int create(char parent_path[],char file_name[],char infile[])
 	DIR *din = opendir(infile);
 	if(din!=NULL)
 	{
-	    printf("addfile_FAILURE NOT_A_FILE");
+	    printf("addfile_FAILURE NOT_A_FILE\n");
 	    close(din);
 	    return 0;
 	}
@@ -192,7 +192,7 @@ int create(char parent_path[],char file_name[],char infile[])
 	FILE *fin = fopen(infile,"rb");
 	if(fin==NULL)
 	{
-	    printf("addfile_FAILURE CANNOT_OPEN_SPECIFIED_DATAFILE");
+	    printf("addfile_FAILURE CANNOT_OPEN_SPECIFIED_DATAFILE\n");
 	    return 0;
 	}
 	fseek(fin,0,SEEK_END);
@@ -206,7 +206,7 @@ int create(char parent_path[],char file_name[],char infile[])
     long int blocks_req = file_size / sizeof(blockdata.data);
     if(blocks_req >= (METADATA.no_of_blocks - METADATA.no_of_blocks_used))
     {
-        printf("addfile_FAILURE FILE_SYSTEM_FULL");
+        printf("addfile_FAILURE FILE_SYSTEM_FULL\n");
         return 0;
     }
 
@@ -331,7 +331,7 @@ int create(char parent_path[],char file_name[],char infile[])
         ///////////Update BST////////////////////////////////////
 
 	    struct bst  *b = (struct bst*)malloc (sizeof(struct bst));
-	    if(b==NULL){printf("addfile_FAILURE Space not avaliable for creating bst");}
+	    if(b==NULL){printf("addfile_FAILURE SPACE_NOT_AVAILBLE_FOR_CREATING_BST\n");}
 	    else
 	    {    
 	        //b->FD=temp;  
@@ -399,7 +399,7 @@ int create(char parent_path[],char file_name[],char infile[])
 	}
 	else
 	{
-	    	printf("addfile_FAILURE Error in creating File Descriptor for New file");
+	    	printf("addfile_FAILURE ERROR_IN_CREATING_FILE_DESCRIPTOR\n");
 	    	return 0;
 	}
 		
@@ -441,7 +441,7 @@ int list_file(char file_path[],char outputfile[])
 	long int loc=file_desp.location_block_number; //starting data block location
 	if(loc==-1) 
 	{
-	    printf("listfile_FAILURE FILE_EMPTY");
+	    printf("listfile_FAILURE FILE_EMPTY\n");
 	    return 0;
 	}
     FILE *fout = fopen(outputfile,"wb+");
@@ -489,12 +489,12 @@ int rm(char path[])
 {
     if(strcmp(path,"/")==0)
     {
-        printf("removefile_FAILURE Access Denied");
+        printf("removefile_FAILURE Access Denied\n");
         return 0;
     }
     if(strcmp(path,"/")==0)
     {
-        printf("removefile_FAILURE Access Denied");
+        printf("removefile_FAILURE Access Denied\n");
         return 0;
     }
     
@@ -516,7 +516,7 @@ int rm(char path[])
 
      if(strcmp(bstnode->nary_node->file_desp.file_type,"dir")==0)
      {
-        printf("removefile_FAILURE NOT_A_FILE");
+        printf("removefile_FAILURE NOT_A_FILE\n");
        return 0;
      }
       //if node n to be deleted is first child
@@ -599,7 +599,7 @@ int find_file(char name[], char output_file[])
     }    
     if(fout==NULL)
     {
-        printf("searchfile_FAILURE CANNOT_FIND/CREATE_SPECIFIED_OUTPUTFILE");
+        printf("searchfile_FAILURE CANNOT_FIND/CREATE_SPECIFIED_OUTPUTFILE\n");
         return 0;
     }
     fprintf(fout,"\n\n#Searching file with name %s :\n",name);
@@ -638,7 +638,7 @@ int mv(char src_file_path[],char dest_dir_path[])
 	i = separate_path(dir_struct,dest_dir_path,&total_dir_in_path);
 	if(i==0)
 	{ 
-   	     printf("movefile_FAILURE UNABLE_TO_PROCESS_PATH");
+   	     printf("movefile_FAILURE UNABLE_TO_PROCESS_PATH\n");
 	     return 0;
 	}
 	else //form a new path
@@ -657,7 +657,7 @@ int mv(char src_file_path[],char dest_dir_path[])
      struct bst *bstnode_dest = (struct bst*)search_bst_path(BST_FULL_PATH,dest_dir_path);
      if(bstnode_dest!=NULL)
      {
-        printf("movefile_FAILURE FILE_ALREADY_EXISTS");
+        printf("movefile_FAILURE FILE_ALREADY_EXISTS\n");
         return 0;
      }
  
@@ -674,14 +674,14 @@ int mv(char src_file_path[],char dest_dir_path[])
      
      if(strcmp(bstnode_src->nary_node->file_desp.file_type,"dir")==0)
      {
-        printf("movefile_FAILURE NOT_A_FILE");
+        printf("movefile_FAILURE NOT_A_FILE\n");
         return 0;
      }
 
 
      if(strcmp(bstnode_dest->nary_node->file_desp.file_type,"dir")!=0)
      {
-        printf("movefile_FAILURE DESTINATION_CANNOT_BE_FILE");
+        printf("movefile_FAILURE DESTINATION_CANNOT_BE_FILE\n");
         return 0;
      }
 
@@ -811,7 +811,7 @@ int copy_file(char src[],char dest[])
 	i = separate_path(dir_struct,dest,&total_dir_in_path);
 	if(i==0)
 	{ 
-   	     printf("copyfile_FAILURE UNABLE_TO_PROCESS_PATH");
+   	     printf("copyfile_FAILURE UNABLE_TO_PROCESS_PATH\n");
 	     return 0;
 	}
 	else //form a new path
@@ -831,7 +831,7 @@ int copy_file(char src[],char dest[])
      struct bst *bstnode_dest = (struct bst*)search_bst_path(BST_FULL_PATH,dest);
      if(bstnode_dest!=NULL)
      {
-        printf("copyfile_FAILURE FILE_ALREADY_EXISTS");
+        printf("copyfile_FAILURE FILE_ALREADY_EXISTS\n");
      //	printf("copyfile_FAILURE %s\n",ERR_VFS_COPYFILE_05);
         return 0;
      }
@@ -964,7 +964,7 @@ int copy_file(char src[],char dest[])
         ///////////Update BST////////////////////////////////////
 
 	    struct bst  *b = (struct bst*)malloc (sizeof(struct bst));
-	    if(b==NULL){printf("Space not avaliable for creating bst");}
+	    if(b==NULL){printf("Space not avaliable for creating bst\n"); return 0;}
 	    else
 	    {    
 	        //b->FD=temp;  
@@ -1001,7 +1001,7 @@ int copy_file(char src[],char dest[])
 	}
 	else
 	{
-    	printf("copyfile_FAILURE Error_in_creating_File_Descriptor_for_New_directory");
+    	printf("copyfile_FAILURE Error_in_creating_File_Descriptor_for_New_directory\n");
 	    	return 0;
 	}
 		
@@ -1048,7 +1048,7 @@ int export_file(char file_path[],char outputfile[])
 	long int loc=file_desp.location_block_number; //starting data block location
 	if(loc==-1) 
 	{
-	    printf("exportfile_FAILURE File_Empty");
+	    printf("exportfile_FAILURE File_Empty\n");
 	    return 0;
 	}
 	long int index=0;
@@ -1128,21 +1128,21 @@ int update_file(char path[],char fin[])
      //delete old file.........
      if( rm(path) == 0)
      {
-        printf("updatefile_FAILURE UNABLE_DELETE_OLD_DATA");
+        printf("updatefile_FAILURE UNABLE_DELETE_OLD_DATA\n");
         return 0; 
      }
      
      //add new file.........
      if( create(parent_path,file_desp.file_name,fin)==0)   
      {
-        printf("updatefile_FAILURE UNABLE_TO_OVERWRITE");
+        printf("updatefile_FAILURE UNABLE_TO_OVERWRITE\n");
         return 0; 
      }
      ///////////check isdir for input file path
 	DIR *din = opendir(fin);
 	if(din!=NULL)
 	{
-	    printf("update_FAILURE NOT_A_FILE");
+	    printf("update_FAILURE NOT_A_FILE\n");
 	    close(din);
 	    return 0;
 	}
