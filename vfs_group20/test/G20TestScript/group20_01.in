@@ -1,0 +1,28 @@
+createvfs demo 1000
+mountvfs demo
+makedir / a
+makedir /a/b/c/d/e/f/g/ h
+makedir /p/q/r/s/t/u/v/ w
+movedir /a/b/c/d/ /a/b/c/d/e/
+listdir / 1 /tmp/outputdir 
+makedir /x/y/z aa/a
+makedir /aa/bb/cc/dd/ee/ff kk
+makedir /aa/bb/ cc
+deletedir /p
+listdir /p 0 /tmp/outputdir
+listdir / -5 /tmp/outputdir
+unmountvfs demo
+mountvfs demo
+makedir /p/q/r/s/t/u/v/ w
+movedir /p /a/b/c
+movedir 
+unmountvfs demo
+mountvfs demo
+unmountvfs demo
+mountvfs demo
+makedir /home/a/b/f/d e
+makedir /home/a/b/d/d f
+makedir /home/a/b/g/d f
+deletedir /home/a/b
+listdir /home 1 /tmp/outputdir
+unmountvfs demo
